@@ -40,4 +40,19 @@ public class SupabaseInstance {
             }
         }).start();
     }
+    public static OkHttpClient getClient() {
+        return client;
+    }
+
+    public static String getAuthLoginUrl() {
+        return SUPABASE_URL + "/auth/v1/token?grant_type=password";
+    }
+
+    public static String getAnonKey() {
+        return SUPABASE_KEY;
+    }
+    public static String getAuthRegisterUrl() {
+        return SUPABASE_URL + "/auth/v1/signup";
+    }
+
 }
