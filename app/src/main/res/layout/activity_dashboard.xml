@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#121212">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,6 +14,7 @@
         android:text="Book Borrow"
         android:textSize="26sp"
         android:textStyle="bold"
+        android:textColor="#FFFFFF"
         android:layout_marginBottom="40dp" />
 
     <Button
@@ -20,14 +22,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#4CAF50"
-        android:text="Login" />
+        android:text="Login"
+        android:textColor="#000000"
+        android:backgroundTint="#FF9800"
+        android:padding="12dp"
+        android:stateListAnimator="@null" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Register"
+        android:textColor="#FFFFFF"
         android:backgroundTint="#2196F3"
-        android:text="Register" />
+        android:padding="12dp"
+        android:stateListAnimator="@null" />
 
 </LinearLayout>

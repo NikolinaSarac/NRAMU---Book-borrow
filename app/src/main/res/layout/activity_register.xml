@@ -55,8 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#1E88E5"
+        android:textColor="#000000"
+        android:backgroundTint="#FFD600"
         android:padding="12dp"
         android:stateListAnimator="@null" />
 
