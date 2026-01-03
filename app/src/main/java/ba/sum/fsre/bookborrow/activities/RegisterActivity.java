@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import ba.sum.fsre.bookborrow.R;
+import ba.sum.fsre.bookborrow.utils.AuthManager;
 import ba.sum.fsre.bookborrow.utils.SupabaseInstance;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText etName, etEmail, etPassword;
     private Button btnRegister;
+    private AuthManager authManager;
 
     private static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -32,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        AuthManager authManager = new AuthManager(this);
 
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
@@ -77,12 +81,25 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()) {
-                                runOnUiThread(() -> {
-                                    Toast.makeText(RegisterActivity.this,
-                                            "Registration successful", Toast.LENGTH_SHORT).show();
-                                    finish(); // vrati na Dashboard
-                                });
+                            if (response.isSuccessful() && response.body() != null) {
+                                String respStr = response.body().string();
+                                try {
+                                    JSONObject json = new JSONObject(respStr);
+                                    String accessToken = json.getString("access_token");
+
+                                    runOnUiThread(() -> {
+                                        authManager.saveToken(accessToken);
+                                        Toast.makeText(RegisterActivity.this,
+                                                "Registration successful", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    });
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(() ->
+                                            Toast.makeText(RegisterActivity.this,
+                                                    "Parsing error", Toast.LENGTH_SHORT).show());
+                                }
                             } else {
                                 runOnUiThread(() ->
                                         Toast.makeText(RegisterActivity.this,
