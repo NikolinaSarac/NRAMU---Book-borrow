@@ -1,5 +1,6 @@
 package ba.sum.fsre.bookborrow.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +81,11 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(() ->
                                 Toast.makeText(LoginActivity.this,
                                         "Login successful", Toast.LENGTH_SHORT).show());
+
+                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
                     } else {
                         runOnUiThread(() ->
                                 Toast.makeText(LoginActivity.this,
