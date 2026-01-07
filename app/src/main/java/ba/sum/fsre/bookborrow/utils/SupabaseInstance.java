@@ -10,7 +10,6 @@ import okhttp3.Response;
 
 public class SupabaseInstance {
 
-    // Ubaci svoj URL i anon key
     private static final String SUPABASE_URL = "https://gvqwwllhdvsjtpodlruk.supabase.co";
     private static final String SUPABASE_KEY = "sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e";
 
