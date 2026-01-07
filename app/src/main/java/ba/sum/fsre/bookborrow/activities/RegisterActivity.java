@@ -7,19 +7,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
-import ba.sum.fsre.bookborrow.utils.SupabaseInstance;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import com.google.gson.JsonObject;
+import ba.sum.fsre.bookborrow.utils.RetrofitClient;
+import ba.sum.fsre.bookborrow.utils.SupabaseAuthService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -27,15 +24,14 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
     private AuthManager authManager;
 
-    private static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        AuthManager authManager = new AuthManager(this);
+        authManager = new AuthManager(this);
+
 
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
@@ -55,62 +51,40 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        try {
-            JSONObject json = new JSONObject();
-            json.put("email", email);
-            json.put("password", password);
+        JsonObject body = new JsonObject();
+        body.addProperty("email", email);
+        body.addProperty("password", password);
 
-            RequestBody body = RequestBody.create(json.toString(), JSON);
+        SupabaseAuthService service =
+                RetrofitClient.getClient().create(SupabaseAuthService.class);
 
-            Request request = new Request.Builder()
-                    .url(SupabaseInstance.getAuthRegisterUrl())
-                    .addHeader("apikey", SupabaseInstance.getAnonKey())
-                    .addHeader("Content-Type", "application/json")
-                    .post(body)
-                    .build();
+        Call<JsonObject> call = service.register(body);
 
-            SupabaseInstance.getClient()
-                    .newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            runOnUiThread(() ->
-                                    Toast.makeText(RegisterActivity.this,
-                                            "Network error", Toast.LENGTH_SHORT).show());
-                        }
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful() && response.body() != null) {
-                                String respStr = response.body().string();
-                                try {
-                                    JSONObject json = new JSONObject(respStr);
-                                    String accessToken = json.getString("access_token");
+                    String accessToken = response.body().get("access_token").getAsString();
+                    authManager.saveToken(accessToken);
+                    authManager.saveEmail(email);
 
-                                    runOnUiThread(() -> {
-                                        authManager.saveToken(accessToken);
-                                        Toast.makeText(RegisterActivity.this,
-                                                "Registration successful", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    });
+                    Toast.makeText(RegisterActivity.this,
+                            "Registration successful", Toast.LENGTH_SHORT).show();
+                    finish();
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    runOnUiThread(() ->
-                                            Toast.makeText(RegisterActivity.this,
-                                                    "Parsing error", Toast.LENGTH_SHORT).show());
-                                }
-                            } else {
-                                runOnUiThread(() ->
-                                        Toast.makeText(RegisterActivity.this,
-                                                "Registration failed", Toast.LENGTH_SHORT).show());
-                            }
-                        }
-                    });
+                } else {
+                    Toast.makeText(RegisterActivity.this,
+                            "Registration failed", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Unexpected error", Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this,
+                        "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }
