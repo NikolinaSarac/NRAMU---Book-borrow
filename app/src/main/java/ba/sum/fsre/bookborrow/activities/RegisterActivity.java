@@ -1,8 +1,12 @@
 package ba.sum.fsre.bookborrow.activities;
 
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +27,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etName, etEmail, etPassword;
     private Button btnRegister;
     private AuthManager authManager;
+    private ImageButton btnBack;
+    private TextView tvLoginLink;
 
 
     @Override
@@ -32,13 +38,27 @@ public class RegisterActivity extends AppCompatActivity {
 
         authManager = new AuthManager(this);
 
-
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
         btnRegister.setOnClickListener(v -> registerUser());
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        tvLoginLink = findViewById(R.id.tvLoginLink);
+        tvLoginLink.setPaintFlags(tvLoginLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvLoginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void registerUser() {

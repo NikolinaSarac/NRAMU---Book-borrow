@@ -1,41 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dashboard_root"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp"
-    android:background="#121212">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Book Borrow"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="40dp" />
-
-    <Button
-        android:id="@+id/btnLogin"
+    <!-- Background -->
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Login"
-        android:textColor="#000000"
-        android:backgroundTint="#FF9800"
-        android:padding="12dp"
-        android:stateListAnimator="@null" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_dashboard" />
 
-    <Button
-        android:id="@+id/btnRegister"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#2196F3"
-        android:padding="12dp"
-        android:stateListAnimator="@null" />
+        android:layout_height="match_parent"
+        android:background="#CCFFFFFF" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- App logo  -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="48dp"
+            android:src="@drawable/ic_book"
+            android:scaleType="fitCenter"/>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Book borrow"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Subtitle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open your mind to endless possibilities!"
+            android:textSize="16sp"
+            android:textColor="#6D4C41"
+            android:fontFamily="sans-serif"
+            android:layout_marginBottom="48dp"/>
+
+        <!-- LOGIN CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:background="@drawable/card_dashboard"
+            android:elevation="6dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_login"
+                android:scaleType="centerInside"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#5D4037"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- REGISTER CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp"
+            android:gravity="center"
+            android:background="@drawable/card_dashboard"
+            android:elevation="6dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_register"
+                android:scaleType="centerInside"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create account"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#5D4037"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

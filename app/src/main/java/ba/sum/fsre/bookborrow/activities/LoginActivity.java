@@ -1,9 +1,13 @@
 package ba.sum.fsre.bookborrow.activities;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ba.sum.fsre.bookborrow.R;
@@ -17,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
+    private TextView tvRegister;
 
 
     @Override
@@ -29,7 +34,26 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> loginUser());
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        tvRegister = findViewById(R.id.tvRegisterLink);
+        tvRegister.setPaintFlags(tvRegister.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     private void loginUser() {
         String email = etEmail.getText().toString().trim();
