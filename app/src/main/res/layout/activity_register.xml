@@ -1,65 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/register_root"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp"
-    android:background="#121212">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="32dp" />
-
-    <EditText
-        android:id="@+id/etName"
+    <!-- Pozadina -->
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        android:textColorHint="#AAAAAA"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/edit_text_dark"
-        android:layout_marginBottom="16dp"
-        android:padding="12dp" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_dashboard" />
 
-    <EditText
-        android:id="@+id/etEmail"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:textColorHint="#AAAAAA"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/edit_text_dark"
-        android:layout_marginBottom="16dp"
-        android:padding="12dp" />
+        android:layout_height="match_parent"
+        android:background="#CCFFFFFF" />
 
-    <EditText
-        android:id="@+id/etPassword"
+    <!-- Sadržaj -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textColorHint="#AAAAAA"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/edit_text_dark"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textColor="#000000"
-        android:backgroundTint="#FFD600"
-        android:padding="12dp"
-        android:stateListAnimator="@null" />
+        <!-- Back button -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="10dp"
+            android:tint="#1E88E5"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back2" />
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_book"
+            android:scaleType="fitCenter"/>
+
+        <!-- Naslov -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- NAME CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:background="@drawable/card_dashboard"
+            android:elevation="6dp">
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Name"
+                android:padding="8dp"
+                android:textColor="#5D4037"
+                android:textColorHint="#6D4C41"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- EMAIL CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:background="@drawable/card_dashboard"
+            android:elevation="6dp">
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="8dp"
+                android:textColor="#5D4037"
+                android:textColorHint="#6D4C41"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- PASSWORD CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center"
+            android:background="@drawable/card_dashboard"
+            android:elevation="6dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                android:textColor="#5D4037"
+                android:textColorHint="#6D4C41"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- REGISTER BUTTON -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1E88E5"
+            android:layout_marginTop="24dp"
+            android:foreground="?attr/selectableItemBackground"/>
+
+        <!-- LOGIN LINK -->
+        <TextView
+            android:id="@+id/tvLoginLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account? Log in!"
+            android:textColor="#1E88E5"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"/>
+    </LinearLayout>
+</FrameLayout>
