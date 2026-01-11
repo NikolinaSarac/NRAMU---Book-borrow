@@ -1,0 +1,77 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/requestUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tvrtko"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/requestBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Java za početnike"
+            android:textSize="14sp"
+            android:textColor="@color/darker_gray"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/requestAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autor: Mata"
+            android:textSize="14sp"
+            android:textColor="@color/darker_gray"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/requestStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            android:textSize="14sp"
+            android:textColor="@color/purple_500"
+            android:layout_marginTop="2dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnAccept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prihvati"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnRejected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Odbij"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/reject_red"
+                android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

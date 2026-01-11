@@ -1,0 +1,46 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Ime knjige -->
+        <TextView
+            android:id="@+id/sentRequestBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Java za početnike"
+            android:textSize="14sp"
+            android:textColor="@color/darker_gray"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Autor knjige -->
+        <TextView
+            android:id="@+id/sentRequestAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autor: Mata"
+            android:textSize="14sp"
+            android:textColor="@color/darker_gray"
+            android:layout_marginTop="2dp"/>
+
+        <!-- Status zahtjeva -->
+        <TextView
+            android:id="@+id/sentRequestStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            android:textSize="14sp"
+            android:textColor="@color/purple_500"
+            android:layout_marginTop="2dp"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
