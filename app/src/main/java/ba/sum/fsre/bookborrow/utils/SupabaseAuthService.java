@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Map;
 
+import ba.sum.fsre.bookborrow.models.Profile;
 import ba.sum.fsre.bookborrow.models.RequestBook;
 import ba.sum.fsre.bookborrow.models.requests.RequestForBookModel;
 import retrofit2.Call;
@@ -45,7 +46,7 @@ public interface SupabaseAuthService {
             @Query("status") String status
     );
 
-    @GET("rest/v1/book_rent_requests")
+    @GET("rest/v1/borrowing_requests")
     Call<List<RequestBook>> getAllSentRequests(
             @Header("Authorization") String token,
             @Query("requester_id") String userId,
@@ -55,7 +56,7 @@ public interface SupabaseAuthService {
     @PATCH("rest/v1/borrowing_requests")
     Call<Void> updateRequestStatus(
             @Header("Authorization") String token,
-            @Query("id") String id,
+            @Query(value="id", encoded=true) String idFilter,
             @Body Map<String, String> body
     );
 
@@ -67,5 +68,11 @@ public interface SupabaseAuthService {
     Call<JsonObject> getUserProfile(
             @retrofit2.http.Header("Authorization") String bearer,
             @Body JsonObject body
+    );
+
+    @GET("rest/v1/profiles")
+    Call<List<Profile>> getProfile(
+            @Header("Authorization") String token,
+            @Query("id") String userId
     );
 }

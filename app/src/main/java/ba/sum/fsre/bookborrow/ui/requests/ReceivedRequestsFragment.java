@@ -43,10 +43,22 @@ public class ReceivedRequestsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<RequestBook> requestList = new ArrayList<>();
-        adapter = new ReceivedRequestsAdapter(getContext(),requestList);
-        recyclerView.setAdapter(adapter);
+        adapter = new ReceivedRequestsAdapter(getContext(), requestList, new ReceivedRequestsAdapter.OnRequestUpdatedListener() {
+            @Override
+            public void onRequestUpdated() {
+                loadRequests();
+            }
+        });
 
+        recyclerView.setAdapter(adapter);
         bookRepository = new BookRepository(getContext());
+
+        loadRequests();
+
+        return view;
+    }
+
+    private void loadRequests() {
         AuthManager authManager = new AuthManager(getContext());
         String currentUserId = authManager.getUserId();
 
@@ -57,8 +69,8 @@ public class ReceivedRequestsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<RequestBook>> call, Response<List<RequestBook>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    requestList.clear();
-                    requestList.addAll(response.body());
+                    adapter.getRequests().clear();
+                    adapter.getRequests().addAll(response.body());
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.e("ReceivedRequests", "Response not successful");
@@ -70,7 +82,5 @@ public class ReceivedRequestsFragment extends Fragment {
                 Log.e("ReceivedRequests", "API call failed", t);
             }
         });
-
-        return view;
     }
 }

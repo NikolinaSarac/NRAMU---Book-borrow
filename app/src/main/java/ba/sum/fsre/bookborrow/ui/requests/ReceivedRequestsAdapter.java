@@ -12,18 +12,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ba.sum.fsre.bookborrow.models.Profile;
 import ba.sum.fsre.bookborrow.models.RequestBook;
 import ba.sum.fsre.bookborrow.repository.BookRepository;
 import ba.sum.fsre.bookborrow.R;
+import ba.sum.fsre.bookborrow.repository.UserRepository;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedRequestsAdapter.ViewHolder> {
 
     private final List<RequestBook> requests;
     private final Context context;
 
-    public ReceivedRequestsAdapter(Context context,List<RequestBook> requests) {
+    private final UserRepository userRepository;
+
+    public interface OnRequestUpdatedListener {
+        void onRequestUpdated();
+    }
+
+    private final OnRequestUpdatedListener listener;
+
+    public ReceivedRequestsAdapter(Context context,List<RequestBook> requests, OnRequestUpdatedListener listener) {
         this.context = context;
         this.requests = requests;
+        this.listener = listener;
+        this.userRepository = new UserRepository(context);
+    }
+
+    public List<RequestBook> getRequests() {
+        return requests;
     }
 
     @NonNull
@@ -42,7 +61,24 @@ public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedReques
             holder.tvRequestAuthor.setText(request.getBook().getAuthor());
         }
 
-        holder.tvRequestUser.setText("Requester");
+        userRepository.getUserProfile(request.getRequesterId())
+                .enqueue(new Callback<List<Profile>>() {
+                    @Override
+                    public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            Profile profile = response.body().get(0);
+                            holder.tvRequestUser.setText(profile.getUsername());
+                        } else {
+                            holder.tvRequestUser.setText("Requester");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Profile>> call, Throwable t) {
+                        holder.tvRequestUser.setText("Requester");
+                    }
+                });
+
         holder.tvRequestStatus.setText(request.getStatus());
 
         holder.btnAccept.setOnClickListener(v -> {
@@ -91,6 +127,11 @@ public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedReques
                         if (response.isSuccessful()) {
                             request.setStatus(status);
                             notifyItemChanged(position);
+
+                            if(listener != null){
+                                listener.onRequestUpdated();
+                            }
+
                         } else {
                             android.util.Log.e("REQUEST", "Update failed: " + response.code());
                         }

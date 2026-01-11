@@ -111,23 +111,29 @@ public class ProfileActivity extends AppCompatActivity {
                     tvEmail.setText(profile.get("email").getAsString());
 
                     List<JsonObject> booksList = new ArrayList<>();
-                    JsonArray booksArray = profile.getAsJsonArray("books");
-                    for (int i = 0; i < booksArray.size(); i++) {
-                        booksList.add(booksArray.get(i).getAsJsonObject());
+                    if (profile.has("books") && !profile.get("books").isJsonNull()) {
+                        JsonArray booksArray = profile.getAsJsonArray("books");
+                        for (int i = 0; i < booksArray.size(); i++) {
+                            booksList.add(booksArray.get(i).getAsJsonObject());
+                        }
                     }
                     booksFragment.setBooks(booksList);
 
                     List<JsonObject> activeList = new ArrayList<>();
-                    JsonArray activeArray = profile.getAsJsonArray("active_borrows");
-                    for (int i = 0; i < activeArray.size(); i++) {
-                        activeList.add(activeArray.get(i).getAsJsonObject());
+                    if (profile.has("active_borrows") && !profile.get("active_borrows").isJsonNull()) {
+                        JsonArray activeArray = profile.getAsJsonArray("active_borrows");
+                        for (int i = 0; i < activeArray.size(); i++) {
+                            activeList.add(activeArray.get(i).getAsJsonObject());
+                        }
                     }
                     activeBorrowsFragment.setActiveBorrows(activeList);
 
                     List<JsonObject> historyList = new ArrayList<>();
-                    JsonArray historyArray = profile.getAsJsonArray("borrow_history");
-                    for (int i = 0; i < historyArray.size(); i++) {
-                        historyList.add(historyArray.get(i).getAsJsonObject());
+                    if (profile.has("borrow_history") && !profile.get("borrow_history").isJsonNull()) {
+                        JsonArray historyArray = profile.getAsJsonArray("borrow_history");
+                        for (int i = 0; i < historyArray.size(); i++) {
+                            historyList.add(historyArray.get(i).getAsJsonObject());
+                        }
                     }
                     borrowHistoryFragment.setBorrowHistory(historyList);
 

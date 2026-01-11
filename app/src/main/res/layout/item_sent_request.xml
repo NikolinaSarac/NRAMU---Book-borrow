@@ -5,42 +5,63 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:strokeColor="#DDDDDD"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="12dp">
 
-        <!-- Ime knjige -->
-        <TextView
-            android:id="@+id/sentRequestBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Java za početnike"
-            android:textSize="14sp"
-            android:textColor="@color/darker_gray"
-            android:layout_marginTop="4dp"/>
+        <ImageView
+            android:id="@+id/sentRequestImage"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_book"
+            android:contentDescription="Book Image"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/book_image_background"/>
 
-        <!-- Autor knjige -->
-        <TextView
-            android:id="@+id/sentRequestAuthor"
-            android:layout_width="wrap_content"
+        <!-- Podaci o knjizi -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Autor: Mata"
-            android:textSize="14sp"
-            android:textColor="@color/darker_gray"
-            android:layout_marginTop="2dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <!-- Status zahtjeva -->
-        <TextView
-            android:id="@+id/sentRequestStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status: Pending"
-            android:textSize="14sp"
-            android:textColor="@color/purple_500"
-            android:layout_marginTop="2dp"/>
+            <!-- Ime knjige -->
+            <TextView
+                android:id="@+id/sentRequestBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Java za početnike"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333333"/>
+
+            <!-- Autor knjige -->
+            <TextView
+                android:id="@+id/sentRequestAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Autor: Mata"
+                android:textSize="14sp"
+                android:textColor="#777777"
+                android:layout_marginTop="2dp"/>
+
+            <!-- Status zahtjeva -->
+            <TextView
+                android:id="@+id/sentRequestStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: Pending"
+                android:textSize="14sp"
+                android:textColor="#1E88E5"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
