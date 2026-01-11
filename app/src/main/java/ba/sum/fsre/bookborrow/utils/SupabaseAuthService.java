@@ -58,4 +58,14 @@ public interface SupabaseAuthService {
             @Query("id") String id,
             @Body Map<String, String> body
     );
+
+    @Headers({
+            "Content-Type: application/json",
+            "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e"
+    })
+    @POST("rest/v1/rpc/get_user_profile")
+    Call<JsonObject> getUserProfile(
+            @retrofit2.http.Header("Authorization") String bearer,
+            @Body JsonObject body
+    );
 }

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_dashboard" />
+
+    <!-- White overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CCFFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Back button -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:tint="#1E88E5"
+            android:src="@drawable/ic_back2"
+            android:layout_gravity="start"/>
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_book"/>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My profile"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Email -->
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email@example.com"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Tabs -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_dashboard"
+            android:padding="8dp"/>
+
+        <!-- Content -->
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/card_dashboard"/>
+
+        <!-- Logout -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1E88E5"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>
