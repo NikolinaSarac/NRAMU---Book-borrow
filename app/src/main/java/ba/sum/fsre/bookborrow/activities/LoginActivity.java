@@ -33,11 +33,12 @@ public class LoginActivity extends AppCompatActivity {
         authManager = new AuthManager(this);
 
         if (authManager.isLoggedIn()) {
-            Intent intent = new Intent(this, ProfileActivity.class);
+            Intent intent = new Intent(this, AllRequestsActivity.class);
             startActivity(intent);
             finish();
             return;
         }
+
         setContentView(R.layout.activity_login);
 
         etEmail = findViewById(R.id.etEmail);
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,
                                 "Login successful", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, AllRequestsActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

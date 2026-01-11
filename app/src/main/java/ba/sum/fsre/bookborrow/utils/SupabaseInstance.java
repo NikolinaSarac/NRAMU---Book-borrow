@@ -54,4 +54,7 @@ public class SupabaseInstance {
         return SUPABASE_URL + "/auth/v1/signup";
     }
 
+    public static String getSupabaseUrl() {
+        return SUPABASE_URL;
+    }
 }
