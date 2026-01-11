@@ -9,7 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.ui.requests.ReceivedRequestsFragment;
-import ba.sum.fsre.bookborrow.ui.requests.RequestsFragment;
 import ba.sum.fsre.bookborrow.ui.requests.SentRequestsFragment;
 
 public class AllRequestsActivity extends AppCompatActivity {
