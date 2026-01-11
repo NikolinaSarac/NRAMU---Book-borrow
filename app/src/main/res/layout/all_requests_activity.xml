@@ -22,20 +22,14 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Back button -->
-
-        <!-- Logo -->
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="104dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#1E88E5"
-            android:text="Logout"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:tint="#1E88E5"
+            android:src="@drawable/ic_back2"
+            android:background="@android:color/transparent"
+            android:layout_gravity="start"/>
 
         <ImageView
             android:layout_width="72dp"
@@ -44,41 +38,18 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_book"/>
 
-        <!-- Title -->
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My profile"
+            android:text="All Requests"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#4E342E"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"/>
-
-        <!-- Username -->
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:textSize="20sp"
-            android:textColor="#333333"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp"/>
-
-        <!-- Email -->
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="email@example.com"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Tabs -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -86,16 +57,14 @@
             android:background="@drawable/card_dashboard"
             android:padding="8dp"/>
 
-        <!-- Content -->
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:paddingBottom="56dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/card_dashboard"/>
-
-        <!-- Logout -->
+            android:background="@drawable/card_dashboard"
+            android:padding="8dp"/>
 
     </LinearLayout>
 
@@ -113,5 +82,4 @@
         app:menu="@menu/bottom_menu"
         app:labelVisibilityMode="labeled"
         app:animationMode="slide"/>
-
 </FrameLayout>

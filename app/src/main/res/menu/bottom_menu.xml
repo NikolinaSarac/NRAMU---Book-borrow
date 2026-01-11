@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_all_books"
+        android:icon="@drawable/ic_books"
+        android:title="All Books" />
+
+    <item
+        android:id="@+id/nav_requests"
+        android:icon="@drawable/ic_requests"
+        android:title="All Requests" />
+
+    <item
+        android:id="@+id/nav_create_book"
+        android:icon="@drawable/ic_add_book"
+        android:title="Create Book" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+</menu>
