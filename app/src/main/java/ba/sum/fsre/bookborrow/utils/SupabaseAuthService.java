@@ -22,4 +22,15 @@ public interface SupabaseAuthService {
     @POST("auth/v1/signup")
     public Call<JsonObject> register(@Body JsonObject body);
 
+    @Headers({
+            "Content-Type: application/json",
+            "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e"
+    })
+    @POST("rest/v1/rpc/get_user_profile")
+    Call<JsonObject> getUserProfile(
+            @retrofit2.http.Header("Authorization") String bearer,
+            @Body JsonObject body
+    );
+
+
 }

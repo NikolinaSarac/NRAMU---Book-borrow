@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,
                                 "Login successful", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
