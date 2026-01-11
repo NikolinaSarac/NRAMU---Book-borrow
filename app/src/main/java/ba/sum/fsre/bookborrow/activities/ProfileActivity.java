@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     private TextView tvUsername, tvEmail;
     private Button btnLogout;
@@ -89,6 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         loadProfile();
+        setupBottomNav(R.id.nav_profile);
     }
 
     private void loadProfile() {
