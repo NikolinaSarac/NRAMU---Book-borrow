@@ -22,7 +22,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Back button -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="20dp"
@@ -32,7 +31,6 @@
             android:background="@android:color/transparent"
             android:layout_gravity="start"/>
 
-        <!-- Logo -->
         <ImageView
             android:layout_width="72dp"
             android:layout_height="72dp"
@@ -40,7 +38,6 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_book"/>
 
-        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -60,16 +57,29 @@
             android:background="@drawable/card_dashboard"
             android:padding="8dp"/>
 
-        <!-- Requests container -->
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:paddingBottom="56dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/card_dashboard"
             android:padding="8dp"/>
 
     </LinearLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:menu="@menu/bottom_menu"
+        app:labelVisibilityMode="labeled"
+        app:animationMode="slide"/>
 </FrameLayout>

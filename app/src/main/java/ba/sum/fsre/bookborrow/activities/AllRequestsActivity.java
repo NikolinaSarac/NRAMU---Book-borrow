@@ -11,7 +11,7 @@ import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.ui.requests.ReceivedRequestsFragment;
 import ba.sum.fsre.bookborrow.ui.requests.SentRequestsFragment;
 
-public class AllRequestsActivity extends AppCompatActivity {
+public class AllRequestsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,5 +48,7 @@ public class AllRequestsActivity extends AppCompatActivity {
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+        setupBottomNav(R.id.nav_requests);
     }
 }
