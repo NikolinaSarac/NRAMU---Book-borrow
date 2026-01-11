@@ -97,7 +97,6 @@ public class ProfileActivity extends BaseActivity {
                 RetrofitClient.getClient().create(SupabaseAuthService.class);
 
         JsonObject body = new JsonObject();
-        body.addProperty("uid", authManager.getUserId());
 
         service.getUserProfile(
                 "Bearer " + authManager.getToken(),
@@ -105,12 +104,25 @@ public class ProfileActivity extends BaseActivity {
         ).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.e("ProfileActivity", "HTTP CODE: " + response.code());
+                Log.e("ProfileActivity", "MESSAGE: " + response.message());
+
+                if (response.errorBody() != null) {
+                    try {
+                        Log.e("ProfileActivity", "ERROR BODY: " + response.errorBody().string());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject profile = response.body();
 
                     tvUsername.setText(profile.get("username").getAsString());
                     tvEmail.setText(profile.get("email").getAsString());
 
+<<<<<<< Updated upstream
                     List<JsonObject> booksList = new ArrayList<>();
                     if (profile.has("books") && !profile.get("books").isJsonNull()) {
                         JsonArray booksArray = profile.getAsJsonArray("books");
@@ -138,16 +150,16 @@ public class ProfileActivity extends BaseActivity {
                     }
                     borrowHistoryFragment.setBorrowHistory(historyList);
 
+=======
+>>>>>>> Stashed changes
                 } else {
                     Toast.makeText(ProfileActivity.this,
                             "Failed to load profile", Toast.LENGTH_SHORT).show();
                 }
-                try {
-                    Log.e("ProfileActivity", "Error body: " + response.errorBody().string());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Log.e("ProfileActivity", "TOKEN = " + authManager.getToken());
+                Log.e("ProfileActivity", "USER ID = " + authManager.getUserId());
             }
+
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {

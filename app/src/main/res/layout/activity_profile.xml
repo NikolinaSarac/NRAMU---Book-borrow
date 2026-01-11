@@ -23,15 +23,20 @@
         android:padding="24dp">
 
         <!-- Back button -->
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:tint="#1E88E5"
-            android:src="@drawable/ic_back2"
-            android:layout_gravity="start"/>
 
         <!-- Logo -->
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="104dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#1E88E5"
+            android:text="Logout"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="72dp"
             android:layout_height="72dp"
@@ -91,16 +96,6 @@
             android:background="@drawable/card_dashboard"/>
 
         <!-- Logout -->
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#1E88E5"
-            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
 
