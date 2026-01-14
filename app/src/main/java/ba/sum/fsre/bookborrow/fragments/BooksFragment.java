@@ -23,7 +23,7 @@ public class BooksFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private BooksAdapter adapter;
-    private List<JsonObject> books = new ArrayList<>();
+    private final List<JsonObject> books = new ArrayList<>();
 
     @Nullable
     @Override
@@ -32,17 +32,23 @@ public class BooksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_books, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewBooks);
-        adapter = new BooksAdapter(books);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = new BooksAdapter(books, true, false);
+
         recyclerView.setAdapter(adapter);
+
+        // ako su knjige već došle prije nego se view napravio
+        adapter.notifyDataSetChanged();
 
         return view;
     }
 
     public void setBooks(List<JsonObject> newBooks) {
+        books.clear();
+        if (newBooks != null) books.addAll(newBooks);
+
         if (adapter != null) {
-            books.clear();
-            books.addAll(newBooks);
             adapter.notifyDataSetChanged();
         }
     }

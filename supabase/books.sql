@@ -6,3 +6,10 @@ CREATE TABLE books (
     created_at timestamp with time zone DEFAULT now(),
     available boolean DEFAULT true
 );
+
+
+ALTER TABLE books
+ADD COLUMN IF NOT EXISTS description text;
+
+
+alter table public.books add column image_url text;
