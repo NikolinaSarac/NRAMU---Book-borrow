@@ -10,8 +10,9 @@ import okhttp3.Response;
 
 public class SupabaseInstance {
 
-    private static final String SUPABASE_URL = "https://gvqwwllhdvsjtpodlruk.supabase.co";
+    private static final String SUPABASE_URL = "https://gvqwwllhdvsjtpodlruk.supabase.co/";
     private static final String SUPABASE_KEY = "sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e";
+
 
     private static final OkHttpClient client = new OkHttpClient();
 

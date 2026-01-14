@@ -75,4 +75,37 @@ public interface SupabaseAuthService {
             @Header("Authorization") String token,
             @Query("id") String userId
     );
+
+    @GET("rest/v1/books")
+    Call<List<JsonObject>> getAllBooks(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter
+    );
+
+    @POST("rest/v1/books")
+    Call<Void> createBook(
+            @Header("Authorization") String token,
+            @Body JsonObject body
+    );
+
+    @Headers({
+            "Content-Type: application/json",
+            "Prefer: return=representation"
+    })
+    @POST("rest/v1/books")
+    Call<List<JsonObject>> insertBook(
+            @Header("Authorization") String token,
+            @Body JsonObject body
+    );
+
+    @GET("rest/v1/books")
+    Call<List<JsonObject>> getMyBooks(
+            @Header("Authorization") String auth,
+            @Query("select") String select,
+            @Query("user_id") String userFilter
+    );
+
+
+
 }
