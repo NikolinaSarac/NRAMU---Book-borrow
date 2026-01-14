@@ -1,5 +1,6 @@
 package ba.sum.fsre.bookborrow.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,10 +46,7 @@ public class ProfileActivity extends BaseActivity {
     private ActiveBorrowsFragment activeBorrowsFragment;
     private BorrowHistoryFragment borrowHistoryFragment;
 
-    // tab "Vlastite knjige" (dolazi iz books tabele, ima image_url)
     private final List<JsonObject> myBooksList = new ArrayList<>();
-
-    // ove dvije ostaju iz profila
     private final List<JsonObject> cachedActive = new ArrayList<>();
     private final List<JsonObject> cachedHistory = new ArrayList<>();
 
@@ -67,8 +65,7 @@ public class ProfileActivity extends BaseActivity {
 
         btnLogout.setOnClickListener(v -> logout());
 
-        // Kreiraj fragmente jednom
-        booksFragment = new BooksFragment();
+        booksFragment = BooksFragment.newInstance(true, false);
         activeBorrowsFragment = new ActiveBorrowsFragment();
         borrowHistoryFragment = new BorrowHistoryFragment();
 
@@ -77,42 +74,40 @@ public class ProfileActivity extends BaseActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Aktivne posudbe"));
         tabLayout.addTab(tabLayout.newTab().setText("Povijest posudbi"));
 
-        // Default tab
         replaceFragment(booksFragment, TAG_BOOKS);
-        booksFragment.setBooks(myBooksList);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                showTab(tab.getPosition());
-            }
-
+            @Override public void onTabSelected(TabLayout.Tab tab) { showTab(tab.getPosition()); }
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                showTab(tab.getPosition());
-            }
+            @Override public void onTabReselected(TabLayout.Tab tab) { showTab(tab.getPosition()); }
         });
 
-        // username/email + active/history
         loadProfile();
-
-        //povuci iz books tabele (ima image_url)
         loadMyBooks();
 
+        getSupportFragmentManager().executePendingTransactions();
+        attachMyBooksActionsSafely();
+
         setupBottomNav(R.id.nav_profile);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tabLayout != null && tabLayout.getSelectedTabPosition() == 0) {
+            loadMyBooks(); // ✅ refresh nakon edit-a
+        }
     }
 
     private void showTab(int position) {
         if (position == 0) {
             replaceFragment(booksFragment, TAG_BOOKS);
 
-
             loadMyBooks();
-
-            // prikazi trenutno cache-anu listu (update će doći kad API vrati)
             booksFragment.setBooks(myBooksList);
+
+            getSupportFragmentManager().executePendingTransactions();
+            attachMyBooksActionsSafely();
 
         } else if (position == 1) {
             replaceFragment(activeBorrowsFragment, TAG_ACTIVE);
@@ -131,87 +126,127 @@ public class ProfileActivity extends BaseActivity {
                 .commit();
     }
 
-    //
-    private void loadProfile() {
-        SupabaseAuthService service =
-                RetrofitClient.getClient().create(SupabaseAuthService.class);
-
-        JsonObject body = new JsonObject();
-
-        service.getUserProfile(
-                "Bearer " + authManager.getToken(),
-                body
-        ).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                Log.e(TAG, "HTTP CODE: " + response.code());
-                Log.e(TAG, "MESSAGE: " + response.message());
-
-                if (response.errorBody() != null) {
-                    try {
-                        Log.e(TAG, "ERROR BODY: " + response.errorBody().string());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (response.isSuccessful() && response.body() != null) {
-                    JsonObject profile = response.body();
-
-                    tvUsername.setText(profile.has("username") && !profile.get("username").isJsonNull()
-                            ? profile.get("username").getAsString()
-                            : "");
-
-                    tvEmail.setText(profile.has("email") && !profile.get("email").isJsonNull()
-                            ? profile.get("email").getAsString()
-                            : "");
-
-                    // --- ACTIVE BORROWS ---
-                    List<JsonObject> activeList = new ArrayList<>();
-                    if (profile.has("active_borrows") && !profile.get("active_borrows").isJsonNull()) {
-                        JsonArray activeArray = profile.getAsJsonArray("active_borrows");
-                        for (int i = 0; i < activeArray.size(); i++) {
-                            activeList.add(activeArray.get(i).getAsJsonObject());
-                        }
-                    }
-
-                    cachedActive.clear();
-                    cachedActive.addAll(activeList);
-                    activeBorrowsFragment.setActiveBorrows(cachedActive);
-
-                    // --- BORROW HISTORY ---
-                    List<JsonObject> historyList = new ArrayList<>();
-                    if (profile.has("borrow_history") && !profile.get("borrow_history").isJsonNull()) {
-                        JsonArray historyArray = profile.getAsJsonArray("borrow_history");
-                        for (int i = 0; i < historyArray.size(); i++) {
-                            historyList.add(historyArray.get(i).getAsJsonObject());
-                        }
-                    }
-
-                    cachedHistory.clear();
-                    cachedHistory.addAll(historyList);
-                    borrowHistoryFragment.setBorrowHistory(cachedHistory);
-
-                } else {
-                    Toast.makeText(ProfileActivity.this,
-                            "Failed to load profile", Toast.LENGTH_SHORT).show();
-                }
-
-                //
-                Log.e(TAG, "USER ID = " + authManager.getUserId());
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "Network error: " + t.getMessage(), t);
-                Toast.makeText(ProfileActivity.this,
-                        "Network error", Toast.LENGTH_SHORT).show();
+    private void attachMyBooksActionsSafely() {
+        runOnUiThread(() -> {
+            if (booksFragment != null && booksFragment.getAdapter() != null) {
+                booksFragment.getAdapter().setOnDeleteClickListener(this::confirmDelete);
             }
         });
     }
 
-    // povlači knjige iz books tabele, gdje image_url postoji
+    private void loadProfile() {
+        SupabaseAuthService service = RetrofitClient.getClient().create(SupabaseAuthService.class);
+
+        JsonObject body = new JsonObject();
+
+        service.getUserProfile("Bearer " + authManager.getToken(), body)
+                .enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        Log.e(TAG, "HTTP CODE: " + response.code());
+                        Log.e(TAG, "MESSAGE: " + response.message());
+
+                        if (response.errorBody() != null) {
+                            try {
+                                Log.e(TAG, "ERROR BODY: " + response.errorBody().string());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            JsonObject profile = response.body();
+
+                            tvUsername.setText(profile.has("username") && !profile.get("username").isJsonNull()
+                                    ? profile.get("username").getAsString()
+                                    : "");
+
+                            tvEmail.setText(profile.has("email") && !profile.get("email").isJsonNull()
+                                    ? profile.get("email").getAsString()
+                                    : "");
+
+                            // ACTIVE
+                            List<JsonObject> activeList = new ArrayList<>();
+                            if (profile.has("active_borrows") && !profile.get("active_borrows").isJsonNull()) {
+                                JsonArray activeArray = profile.getAsJsonArray("active_borrows");
+                                for (int i = 0; i < activeArray.size(); i++) {
+                                    activeList.add(activeArray.get(i).getAsJsonObject());
+                                }
+                            }
+                            cachedActive.clear();
+                            cachedActive.addAll(activeList);
+                            activeBorrowsFragment.setActiveBorrows(cachedActive);
+
+                            // HISTORY
+                            List<JsonObject> historyList = new ArrayList<>();
+                            if (profile.has("borrow_history") && !profile.get("borrow_history").isJsonNull()) {
+                                JsonArray historyArray = profile.getAsJsonArray("borrow_history");
+                                for (int i = 0; i < historyArray.size(); i++) {
+                                    historyList.add(historyArray.get(i).getAsJsonObject());
+                                }
+                            }
+                            cachedHistory.clear();
+                            cachedHistory.addAll(historyList);
+                            borrowHistoryFragment.setBorrowHistory(cachedHistory);
+
+                        } else {
+                            Toast.makeText(ProfileActivity.this,
+                                    "Failed to load profile",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        Log.e(TAG, "USER ID = " + authManager.getUserId());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.e(TAG, "Network error: " + t.getMessage(), t);
+                        Toast.makeText(ProfileActivity.this,
+                                "Network error",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void confirmDelete(String bookId) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete book?")
+                .setMessage("Are you sure you want to delete this book?")
+                .setPositiveButton("Delete", (d, which) -> deleteBook(bookId))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void deleteBook(String bookId) {
+        String token = authManager.getToken();
+        if (token == null || token.isEmpty()) return;
+
+        String authHeader = token.startsWith("Bearer ") ? token : "Bearer " + token;
+
+        SupabaseAuthService service = RetrofitClient.getClient().create(SupabaseAuthService.class);
+        service.deleteBook(authHeader, "eq." + bookId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(ProfileActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                    loadMyBooks();
+                } else {
+                    Toast.makeText(ProfileActivity.this,
+                            "Delete failed: " + response.code(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this,
+                        t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void loadMyBooks() {
         String token = authManager.getToken();
         if (token == null || token.isEmpty()) return;
@@ -230,16 +265,9 @@ public class ProfileActivity extends BaseActivity {
                         myBooksList.clear();
                         myBooksList.addAll(response);
 
-                        // Debug prvih par image_url
-                        for (int i = 0; i < Math.min(5, myBooksList.size()); i++) {
-                            JsonObject b = myBooksList.get(i);
-                            String url = (b.has("image_url") && !b.get("image_url").isJsonNull())
-                                    ? b.get("image_url").getAsString()
-                                    : "null";
-                            Log.e("MY_BOOKS_DEBUG", i + " image_url=" + url);
-                        }
-
                         booksFragment.setBooks(myBooksList);
+
+                        attachMyBooksActionsSafely();
                     }
 
                     @Override

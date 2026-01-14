@@ -16,6 +16,8 @@ import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.DELETE;
+
 
 public interface SupabaseAuthService {
     @Headers({
@@ -105,6 +107,29 @@ public interface SupabaseAuthService {
             @Query("select") String select,
             @Query("user_id") String userFilter
     );
+
+    @Headers({
+            "Content-Type: application/json",
+            "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e"
+    })
+    @PATCH("rest/v1/books")
+    Call<Void> updateBook(
+            @Header("Authorization") String token,
+            @Query(value = "id", encoded = true) String idFilter,
+            @Body JsonObject body
+    );
+
+    @Headers({
+            "Content-Type: application/json",
+            "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e"
+    })
+    @retrofit2.http.DELETE("rest/v1/books")
+    Call<Void> deleteBook(
+            @Header("Authorization") String token,
+            @Query(value = "id", encoded = true) String idFilter
+    );
+
+
 
 
 
