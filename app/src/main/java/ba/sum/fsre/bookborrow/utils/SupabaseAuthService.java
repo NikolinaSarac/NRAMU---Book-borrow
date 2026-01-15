@@ -129,8 +129,19 @@ public interface SupabaseAuthService {
             @Query(value = "id", encoded = true) String idFilter
     );
 
+    @GET("rest/v1/borrowing_requests")
+    Call<List<JsonObject>>  getMyBooksHistory(
+            @Header("Authorization") String token,
+            @Query("requester_id") String userId,
+            @Query("select") String select,
+            @Query("or") String orFilter
+    );
 
-
-
-
+    @GET("rest/v1/borrowing_requests")
+    Call<List<JsonObject>>  getActiveBorrows(
+            @Header("Authorization") String token,
+            @Query("requester_id") String userId,
+            @Query("status") String statusFilter,
+            @Query("select") String select
+    );
 }

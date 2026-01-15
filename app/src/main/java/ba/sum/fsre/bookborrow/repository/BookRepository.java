@@ -38,4 +38,5 @@ public class BookRepository  {
     public Call<Void> updateBookRequestStatus(String requestId, Map<String, String> body) {
         return api.updateRequestStatus(bearer(),"eq." + requestId,body);
     }
+
 }
