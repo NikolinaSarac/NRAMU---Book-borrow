@@ -32,7 +32,7 @@ public class ActiveBorrowsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_active_borrows, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewActive);
-        adapter = new BorrowsAdapter(activeBorrowsList);
+        adapter = new BorrowsAdapter(getContext(),activeBorrowsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 

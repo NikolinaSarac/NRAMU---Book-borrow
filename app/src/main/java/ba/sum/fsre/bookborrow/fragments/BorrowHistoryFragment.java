@@ -32,7 +32,7 @@ public class BorrowHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_borrow_history, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewHistory);
-        adapter = new BorrowsAdapter(borrowHistoryList);
+        adapter = new BorrowsAdapter(getContext(),borrowHistoryList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 

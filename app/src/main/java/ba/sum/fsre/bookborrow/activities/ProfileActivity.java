@@ -22,6 +22,8 @@ import ba.sum.fsre.bookborrow.api.ApiCallback;
 import ba.sum.fsre.bookborrow.fragments.ActiveBorrowsFragment;
 import ba.sum.fsre.bookborrow.fragments.BooksFragment;
 import ba.sum.fsre.bookborrow.fragments.BorrowHistoryFragment;
+import ba.sum.fsre.bookborrow.models.RequestBook;
+import ba.sum.fsre.bookborrow.repository.BookRepository;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
 import ba.sum.fsre.bookborrow.utils.RetrofitClient;
 import ba.sum.fsre.bookborrow.utils.RetrofitClientService;
@@ -51,6 +53,7 @@ public class ProfileActivity extends BaseActivity {
     private final List<JsonObject> cachedHistory = new ArrayList<>();
 
     private TabLayout tabLayout;
+    BookRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
 
         authManager = new AuthManager(this);
+        repository =  new BookRepository(this);
 
         tvUsername = findViewById(R.id.tvUsername);
         tvEmail = findViewById(R.id.tvEmail);
@@ -77,9 +81,19 @@ public class ProfileActivity extends BaseActivity {
         replaceFragment(booksFragment, TAG_BOOKS);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) { showTab(tab.getPosition()); }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) { showTab(tab.getPosition()); }
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                showTab(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                showTab(tab.getPosition());
+            }
         });
 
         loadProfile();
@@ -111,10 +125,13 @@ public class ProfileActivity extends BaseActivity {
 
         } else if (position == 1) {
             replaceFragment(activeBorrowsFragment, TAG_ACTIVE);
+            loadActiveBooks();
             activeBorrowsFragment.setActiveBorrows(cachedActive);
 
         } else if (position == 2) {
             replaceFragment(borrowHistoryFragment, TAG_HISTORY);
+
+            loadBooksHistory();
             borrowHistoryFragment.setBorrowHistory(cachedHistory);
         }
     }
@@ -266,6 +283,78 @@ public class ProfileActivity extends BaseActivity {
                         myBooksList.addAll(response);
 
                         booksFragment.setBooks(myBooksList);
+
+                        attachMyBooksActionsSafely();
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Log.e(TAG, "loadMyBooks error: " + errorMessage);
+                    }
+                });
+    }
+
+    private void loadBooksHistory()
+    {
+        String token = authManager.getToken();
+        if (token == null || token.isEmpty()) return;
+
+        String authHeader = token.startsWith("Bearer ") ? token : "Bearer " + token;
+
+        String userId = authManager.getUserId();
+        if (userId == null || userId.isEmpty()) return;
+
+        RetrofitClientService.getInstance()
+                .getApi()
+                .getMyBooksHistory(
+                        authHeader,
+                        "eq." + userId,
+                        "*,book:books(name,author,image_url)",
+                        "(status.eq.approved,status.eq.returned)"
+                )
+                .enqueue(new ApiCallback<List<JsonObject>>() {
+                    @Override
+                    public void onSuccess(List<JsonObject> response) {
+                        cachedHistory.clear();
+                        cachedHistory.addAll(response);
+
+                        borrowHistoryFragment.setBorrowHistory(cachedHistory);
+
+                        attachMyBooksActionsSafely();
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Log.e(TAG, "loadMyBooks error: " + errorMessage);
+                    }
+                });
+    }
+
+    private void loadActiveBooks()
+    {
+        String token = authManager.getToken();
+        if (token == null || token.isEmpty()) return;
+
+        String authHeader = token.startsWith("Bearer ") ? token : "Bearer " + token;
+
+        String userId = authManager.getUserId();
+        if (userId == null || userId.isEmpty()) return;
+
+        RetrofitClientService.getInstance()
+                .getApi()
+                .getActiveBorrows(
+                        authHeader,
+                        "eq." + userId,
+                        "eq.approved",
+                        "*,book:books(name,author,image_url)"
+                )
+                .enqueue(new ApiCallback<List<JsonObject>>() {
+                    @Override
+                    public void onSuccess(List<JsonObject> response) {
+                        cachedActive.clear();
+                        cachedActive.addAll(response);
+
+                        activeBorrowsFragment.setActiveBorrows(cachedActive);
 
                         attachMyBooksActionsSafely();
                     }

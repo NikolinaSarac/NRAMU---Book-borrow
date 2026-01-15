@@ -29,7 +29,7 @@
         <activity android:name=".activities.AddBookActivity" />
         <activity android:name=".activities.BookDetailsActivity" />
         <activity android:name=".activities.EditBookActivity" />
-
+        <activity android:name=".activities.BookRequestActivity" />
 
 
 

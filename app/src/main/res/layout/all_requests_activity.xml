@@ -22,15 +22,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:tint="#1E88E5"
-            android:src="@drawable/ic_back2"
-            android:background="@android:color/transparent"
-            android:layout_gravity="start"/>
-
         <ImageView
             android:layout_width="72dp"
             android:layout_height="72dp"
