@@ -20,6 +20,12 @@ public class BaseActivity extends AppCompatActivity {
 
             if (item.getItemId() == R.id.nav_requests)
                 startActivity(new Intent(this, AllRequestsActivity.class));
+
+            if (item.getItemId() == R.id.nav_all_books)
+                startActivity(new Intent(this, AllBooksActivity.class));
+
+            if (item.getItemId() == R.id.nav_add_book)
+                startActivity(new Intent(this, AddBookActivity.class));
             return true;
         });
     }

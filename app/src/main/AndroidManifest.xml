@@ -25,6 +25,14 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.AllRequestsActivity" />
+        <activity android:name=".activities.AllBooksActivity" />
+        <activity android:name=".activities.AddBookActivity" />
+        <activity android:name=".activities.BookDetailsActivity" />
+        <activity android:name=".activities.EditBookActivity" />
+
+
+
+
 
 
 

@@ -11,9 +11,9 @@
         android:title="All Requests" />
 
     <item
-        android:id="@+id/nav_create_book"
+        android:id="@+id/nav_add_book"
         android:icon="@drawable/ic_add_book"
-        android:title="Create Book" />
+        android:title="Add" />
 
     <item
         android:id="@+id/nav_profile"
