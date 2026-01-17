@@ -38,7 +38,7 @@ public class AddBookActivity extends BaseActivity {
 
     private TextInputEditText etName, etAuthor, etDescription;
     private Button btnCreate, btnPickImage;
-    private ImageButton btnBack;
+    //private ImageButton btnBack;
 
     private Uri selectedImageUri;
     private ImageView ivPreview;
@@ -64,12 +64,12 @@ public class AddBookActivity extends BaseActivity {
         etDescription = findViewById(R.id.etBookDescription);
 
         btnCreate = findViewById(R.id.btnCreateBook);
-        btnBack = findViewById(R.id.btnBack);
+        //btnBack = findViewById(R.id.btnBack);
 
         ivPreview = findViewById(R.id.ivPreview);
         btnPickImage = findViewById(R.id.btnPickImage);
 
-        btnBack.setOnClickListener(v -> finish());
+        //btnBack.setOnClickListener(v -> finish());
 
         // token + userId uzmi odmah jednom
         AuthManager auth = new AuthManager(this);
@@ -98,7 +98,7 @@ public class AddBookActivity extends BaseActivity {
             uploadImageThenInsertBook(name, author, description);
         });
 
-        setupBottomNav(R.id.nav_all_books);
+        setupBottomNav(R.id.nav_add_book);
     }
 
     private void uploadImageThenInsertBook(String name, String author, String description) {
