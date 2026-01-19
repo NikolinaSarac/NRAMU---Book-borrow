@@ -41,9 +41,9 @@
 
                 <ImageView
                     android:id="@+id/btnAddDetails"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_edit_fancy"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_edit"
                     android:contentDescription="Add details"
                     android:visibility="gone"/>
 
