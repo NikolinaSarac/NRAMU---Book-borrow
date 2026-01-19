@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +37,9 @@ public class AddBookActivity extends BaseActivity {
 
     private TextInputEditText etName, etAuthor, etDescription;
     private Button btnCreate, btnPickImage;
-    //private ImageButton btnBack;
+ borrow-details-dialog-ui
+
+ main
 
     private Uri selectedImageUri;
     private ImageView ivPreview;
@@ -64,12 +65,16 @@ public class AddBookActivity extends BaseActivity {
         etDescription = findViewById(R.id.etBookDescription);
 
         btnCreate = findViewById(R.id.btnCreateBook);
-        //btnBack = findViewById(R.id.btnBack);
+borrow-details-dialog-ui
+
+main
 
         ivPreview = findViewById(R.id.ivPreview);
         btnPickImage = findViewById(R.id.btnPickImage);
 
-        //btnBack.setOnClickListener(v -> finish());
+borrow-details-dialog-ui
+
+main
 
         // token + userId uzmi odmah jednom
         AuthManager auth = new AuthManager(this);

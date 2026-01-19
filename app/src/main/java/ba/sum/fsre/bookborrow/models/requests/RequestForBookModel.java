@@ -13,6 +13,19 @@ public class RequestForBookModel {
     @SerializedName("requester_id")
     private String requesterId;
 
+    @SerializedName("pickup_date")
+    private String pickupDate;
+
+    @SerializedName("pickup_time")
+    private String pickupTime;
+
+    @SerializedName("location")
+    private String location;
+
+    @SerializedName("description")
+    private String description;
+
+
     public RequestForBookModel(String bookId, String ownerId, String requesterId) {
         this.bookId = bookId;
         this.ownerId = ownerId;
@@ -42,4 +55,16 @@ public class RequestForBookModel {
     public void setRequesterId(String requesterId) {
         this.requesterId = requesterId;
     }
+
+    public String getPickupDate() { return pickupDate; }
+    public void setPickupDate(String pickupDate) { this.pickupDate = pickupDate; }
+
+    public String getPickupTime() { return pickupTime; }
+    public void setPickupTime(String pickupTime) { this.pickupTime = pickupTime; }
+
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 }
