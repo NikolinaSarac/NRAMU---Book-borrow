@@ -3,12 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Background -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_dashboard" />
 
+    <!-- White overlay -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,61 +22,63 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <!-- Back button -->
+
+        <!-- Logo -->
+
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="104dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#1E88E5"
             android:text="Logout"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_book"/>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
+            android:text="My profile"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
 
+        <!-- Username -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp"/>
 
-            <LinearLayout
-                android:id="@+id/userInfoContainer"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:gravity="end"
-                android:layout_marginEnd="72dp">
+        <!-- Email -->
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email@example.com"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"/>
 
-                <TextView
-                    android:id="@+id/tvUsername"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textColor="#333333"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="email@example.com"
-                    android:textSize="16sp"
-                    android:textColor="#666666"/>
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imgLogo"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:src="@drawable/ic_book" />
-
-        </RelativeLayout>
-
-
+        <!-- Tabs -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -91,6 +95,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/card_dashboard"/>
 
+        <!-- Logout -->
 
     </LinearLayout>
 

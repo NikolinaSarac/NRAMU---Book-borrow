@@ -58,7 +58,7 @@ public interface SupabaseAuthService {
     @PATCH("rest/v1/borrowing_requests")
     Call<Void> updateRequestStatus(
             @Header("Authorization") String token,
-            @Query(value = "id", encoded = true) String idFilter,
+            @Query(value="id", encoded=true) String idFilter,
             @Body Map<String, String> body
     );
 
@@ -130,7 +130,7 @@ public interface SupabaseAuthService {
     );
 
     @GET("rest/v1/borrowing_requests")
-    Call<List<JsonObject>> getMyBooksHistory(
+    Call<List<JsonObject>>  getMyBooksHistory(
             @Header("Authorization") String token,
             @Query("requester_id") String userId,
             @Query("select") String select,
@@ -138,22 +138,10 @@ public interface SupabaseAuthService {
     );
 
     @GET("rest/v1/borrowing_requests")
-    Call<List<JsonObject>> getActiveBorrows(
+    Call<List<JsonObject>>  getActiveBorrows(
             @Header("Authorization") String token,
-            @Query(value = "or", encoded = true) String orFilter,
-            @Query("status") String status,
+            @Query("requester_id") String userId,
+            @Query("status") String statusFilter,
             @Query("select") String select
-    );
-
-    @Headers({
-            "Content-Type: application/json",
-            "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e",
-            "Prefer: return=representation"
-    })
-    @PATCH("rest/v1/borrowing_requests")
-    Call<List<JsonObject>> updateBorrowDetails(
-            @Header("Authorization") String auth,
-            @Query(value = "id", encoded = true) String borrowIdEq,
-            @Body JsonObject body
     );
 }

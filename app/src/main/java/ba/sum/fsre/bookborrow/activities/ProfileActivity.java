@@ -74,9 +74,9 @@ public class ProfileActivity extends BaseActivity {
         borrowHistoryFragment = new BorrowHistoryFragment();
 
         tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("My books"));
-        tabLayout.addTab(tabLayout.newTab().setText("Active borrows"));
-        tabLayout.addTab(tabLayout.newTab().setText("History"));
+        tabLayout.addTab(tabLayout.newTab().setText("Vlastite knjige"));
+        tabLayout.addTab(tabLayout.newTab().setText("Aktivne posudbe"));
+        tabLayout.addTab(tabLayout.newTab().setText("Povijest posudbi"));
 
         replaceFragment(booksFragment, TAG_BOOKS);
 
@@ -340,26 +340,17 @@ public class ProfileActivity extends BaseActivity {
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
 
-        String orFilter =
-                "(requester_id.eq." + userId +
-                        ",owner_id.eq." + userId + ")";
-
-
         RetrofitClientService.getInstance()
                 .getApi()
                 .getActiveBorrows(
                         authHeader,
-                        orFilter,
+                        "eq." + userId,
                         "eq.approved",
                         "*,book:books(name,author,image_url)"
                 )
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {
-
-                        for (int i = 0; i < response.size(); i++) {
-                            Log.e("ACTIVE_DEBUG", "ITEM " + i + ": " + response.get(i).toString());
-                        }
                         cachedActive.clear();
                         cachedActive.addAll(response);
 
