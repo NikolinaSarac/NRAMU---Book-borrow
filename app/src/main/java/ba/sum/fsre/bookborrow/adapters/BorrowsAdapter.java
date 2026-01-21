@@ -1,22 +1,31 @@
 package ba.sum.fsre.bookborrow.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ba.sum.fsre.bookborrow.R;
+import ba.sum.fsre.bookborrow.fragments.BorrowRequestDetailsDialogFragment;
 import ba.sum.fsre.bookborrow.models.Profile;
+import ba.sum.fsre.bookborrow.repository.BookRepository;
 import ba.sum.fsre.bookborrow.repository.UserRepository;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,12 +35,14 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
 
     private List<JsonObject> borrows;
     private final UserRepository userRepository;
+    private final BookRepository bookRepository;
     private final Context context;
 
     public BorrowsAdapter(Context context,List<JsonObject> borrows) {
         this.context = context;
         this.borrows = borrows;
         this.userRepository = new UserRepository(context);
+        this.bookRepository = new BookRepository(context);
     }
 
     @NonNull
@@ -88,6 +99,7 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
             holder.tvOwner.setText("-");
         }
 
+
         JsonObject book = borrow.getAsJsonObject("book");
         String imageUrl = book.has("image_url") && !book.get("image_url").isJsonNull()
                 ? book.get("image_url").getAsString()
@@ -103,7 +115,72 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
                     .error(R.drawable.ic_book)
                     .into(holder.ivBookImage);
         }
+        String currentUserId = userRepository.getCurrentUserId();
+        String ownerId = borrow.has("owner_id") && !borrow.get("owner_id").isJsonNull()
+                ? borrow.get("owner_id").getAsString() : "";
 
+        if (currentUserId.equals(ownerId)) {
+            holder.btnEditBorrow.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnEditBorrow.setVisibility(View.GONE);
+        }
+
+        // --- 2️⃣ Klik na edit → AlertDialog (novi kod)
+        holder.btnEditBorrow.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("Mark as Completed")
+                    .setMessage("Do you want to mark this borrow as completed?")
+                    .setPositiveButton("Yes", (dialog, which) -> markBorrowCompleted(borrow, position))
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+        holder.itemView.setOnClickListener(v -> {
+            FragmentActivity activity = null;
+            Context ctx = v.getContext();
+
+            if (ctx instanceof FragmentActivity) {
+                activity = (FragmentActivity) ctx;
+            } else if (ctx instanceof ContextWrapper) {
+                Context base = ((ContextWrapper) ctx).getBaseContext();
+                if (base instanceof FragmentActivity) activity = (FragmentActivity) base;
+            }
+
+            if (activity == null) return;
+
+            BorrowRequestDetailsDialogFragment dialog =
+                    BorrowRequestDetailsDialogFragment.newInstance(borrow);
+            dialog.show(activity.getSupportFragmentManager(), "BorrowRequestDetails");
+        });
+
+
+
+    }
+
+    private void markBorrowCompleted(JsonObject borrow, int position) {
+        String borrowId = borrow.has("id") ? borrow.get("id").getAsString() : null;
+        if (borrowId == null) return;
+
+        Map<String, String> body = new HashMap<>();
+        body.put("status", "completed");
+
+        bookRepository.updateBookRequestStatus(borrowId, body)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            borrows.remove(position);
+                            notifyItemRemoved(position);
+                            Toast.makeText(context, "Borrow marked as completed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(context, "Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
@@ -114,12 +191,14 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
     static class BorrowViewHolder extends RecyclerView.ViewHolder {
         TextView tvBook, tvStatus, tvOwner;
         ImageView ivBookImage;
+        ImageButton btnEditBorrow;
         public BorrowViewHolder(@NonNull View itemView) {
             super(itemView);
             tvBook = itemView.findViewById(R.id.tvBorrowBook);
             tvStatus = itemView.findViewById(R.id.tvBorrowStatus);
             tvOwner = itemView.findViewById(R.id.tvBorrowOwner);
             ivBookImage = itemView.findViewById(R.id.ivBookImage);
+            btnEditBorrow = itemView.findViewById(R.id.btnEditBorrow);
         }
     }
 }

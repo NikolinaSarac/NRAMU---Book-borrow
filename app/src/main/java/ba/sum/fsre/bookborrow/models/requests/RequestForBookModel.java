@@ -12,11 +12,44 @@ public class RequestForBookModel {
 
     @SerializedName("requester_id")
     private String requesterId;
+    @SerializedName("first_name")
+    private String firstName;
 
-    public RequestForBookModel(String bookId, String ownerId, String requesterId) {
+    @SerializedName("last_name")
+    private String lastName;
+
+    @SerializedName("address")
+    private String address;
+
+    @SerializedName("postal_code")
+    private String postalCode;
+
+    @SerializedName("city")
+    private String city;
+
+    @SerializedName("shipping_note")
+    private String shippingNote;
+
+    public RequestForBookModel(
+            String bookId,
+            String ownerId,
+            String requesterId,
+            String firstName,
+            String lastName,
+            String address,
+            String postalCode,
+            String city,
+            String shippingNote
+    ) {
         this.bookId = bookId;
         this.ownerId = ownerId;
         this.requesterId = requesterId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.shippingNote = shippingNote;
     }
 
     public String getBookId() {

@@ -23,9 +23,33 @@ public class BookRepository  {
 
     private String bearer() { return "Bearer " + auth.getToken(); }
 
-    public Call<Void> sendBookRequest(String bookId, String ownerId, String requesterId) {
-        return api.sendRequestForBook(bearer(),new RequestForBookModel(bookId,ownerId,requesterId));
+    public Call<Void> sendBookRequestWithShipping(
+            String bookId,
+            String ownerId,
+            String requesterId,
+            String first_name,
+            String last_name,
+            String address,
+            String postal_code,
+            String city,
+            String shipping_note
+    ) {
+        return api.sendRequestForBook(
+                bearer(),
+                new RequestForBookModel(
+                        bookId,
+                        ownerId,
+                        requesterId,
+                        first_name,
+                        last_name,
+                        address,
+                        postal_code,
+                        city,
+                        shipping_note
+                )
+        );
     }
+
 
     public Call<List<RequestBook>> getMyReceivedRequest(String userId, String select) {
         return api.getAllReceivedRequests(bearer(),"eq." + userId,select,"eq.pending");

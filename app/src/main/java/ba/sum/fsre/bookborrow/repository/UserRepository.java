@@ -26,4 +26,8 @@ public class UserRepository {
     public  Call<List<Profile>> getUserProfile(String userId) {
         return api.getProfile(bearer(),"eq." + userId);
     }
+    public String getCurrentUserId() {
+        return auth.getUserId();
+    }
+
 }
