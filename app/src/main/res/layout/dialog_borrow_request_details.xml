@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Borrow Request Details"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"
+            android:layout_marginBottom="16dp" />
+
+        <!-- First Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="First Name"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- Last Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last Name"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- Address -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- Postal Code -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Postal Code"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvPostalCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- City -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- Description / Note -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description / Note"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
+        <TextView
+            android:id="@+id/tvShippingNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:layout_marginBottom="12dp"
+            android:textColor="#212121"/>
+
+        <!-- Close button -->
+        <Button
+            android:id="@+id/btnCloseDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#4E342E"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,6 +1,9 @@
 package ba.sum.fsre.bookborrow.adapters;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +22,10 @@ import java.util.List;
 
 import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.activities.BookDetailsActivity;
-import ba.sum.fsre.bookborrow.activities.BookRequestActivity;
 import ba.sum.fsre.bookborrow.activities.EditBookActivity;
+import androidx.fragment.app.FragmentActivity;
+import ba.sum.fsre.bookborrow.fragments.RequestBookDialogFragment;
+
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
@@ -148,11 +154,31 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
             if (shouldShowRequest && bookId != null && ownerId != null) {
                 holder.btnRequest.setOnClickListener(v -> {
-                    Intent intent = new Intent(v.getContext(), BookRequestActivity.class);
-                    intent.putExtra("BOOK_ID", bookId);
-                    intent.putExtra("OWNER_ID", ownerId);
-                    v.getContext().startActivity(intent);
+                    Context context = v.getContext();
+                    FragmentActivity activity = null;
+                    Log.d("BooksAdapter", "Request button clicked for bookId=" + bookId);
+
+
+                    if (context instanceof FragmentActivity) {
+                        activity = (FragmentActivity) context;
+                    } else if (context instanceof ContextWrapper) {
+                        Context base = ((ContextWrapper) context).getBaseContext();
+                        if (base instanceof FragmentActivity) activity = (FragmentActivity) base;
+                    }
+
+                    if (activity == null) {
+                        Log.e("BooksAdapter", "Cannot find FragmentActivity to show dialog");
+                        return;
+                    }
+
+                    RequestBookDialogFragment dialog = RequestBookDialogFragment.newInstance(bookId, ownerId);
+
+                    // Postavi dijalog u full width da se vidi
+                    dialog.setStyle(DialogFragment.STYLE_NORMAL, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_Alert);
+                    dialog.show(activity.getSupportFragmentManager(), "RequestBookDialog");
                 });
+
+
             } else {
                 holder.btnRequest.setOnClickListener(null);
             }

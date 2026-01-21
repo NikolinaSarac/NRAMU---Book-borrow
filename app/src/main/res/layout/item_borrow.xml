@@ -45,4 +45,13 @@
         android:textColor="#666"/>
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/btnEditBorrow"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_edit"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Edit Borrow"
+        android:visibility="gone" />
+
 </LinearLayout>

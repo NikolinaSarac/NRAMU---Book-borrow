@@ -2,6 +2,7 @@ package ba.sum.fsre.bookborrow.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -74,9 +75,9 @@ public class ProfileActivity extends BaseActivity {
         borrowHistoryFragment = new BorrowHistoryFragment();
 
         tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Vlastite knjige"));
-        tabLayout.addTab(tabLayout.newTab().setText("Aktivne posudbe"));
-        tabLayout.addTab(tabLayout.newTab().setText("Povijest posudbi"));
+        tabLayout.addTab(tabLayout.newTab().setText("My book"));
+        tabLayout.addTab(tabLayout.newTab().setText("Active borrow"));
+        tabLayout.addTab(tabLayout.newTab().setText("History"));
 
         replaceFragment(booksFragment, TAG_BOOKS);
 
@@ -304,13 +305,18 @@ public class ProfileActivity extends BaseActivity {
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
 
+        String select = "id,status,owner_id,requester_id,address,postal_code,city,description,book:books(name,author,image_url)";
+        String orFilter = "or(borrower_id.eq.'" + userId + "',owner_id.eq.'" + userId + "')";
+        String statusFilter = "status=in.(approved,returned,completed)";
+
+
         RetrofitClientService.getInstance()
                 .getApi()
                 .getMyBooksHistory(
                         authHeader,
-                        "eq." + userId,
-                        "*,book:books(name,author,image_url)",
-                        "(status.eq.approved,status.eq.returned)"
+                        null,
+                        select,
+                        orFilter + "&" + statusFilter
                 )
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
@@ -339,14 +345,22 @@ public class ProfileActivity extends BaseActivity {
 
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
+        String userIdQuoted = "'" + userId + "'";
+
+        String orFilter = "or.(borrower_id.eq." + userIdQuoted + ",owner_id.eq." + userIdQuoted + ")";
+        String encodedOrFilter = Uri.encode(orFilter);
+        String statusFilter = "eq.approved";
+
+
+        String select = "*,book:books(name,author,image_url)";
 
         RetrofitClientService.getInstance()
                 .getApi()
                 .getActiveBorrows(
                         authHeader,
-                        "eq." + userId,
-                        "eq.approved",
-                        "*,book:books(name,author,image_url)"
+                        null,
+                        statusFilter,
+                        select + "&or=" + encodedOrFilter
                 )
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
@@ -356,7 +370,6 @@ public class ProfileActivity extends BaseActivity {
 
                         activeBorrowsFragment.setActiveBorrows(cachedActive);
 
-                        attachMyBooksActionsSafely();
                     }
 
                     @Override
