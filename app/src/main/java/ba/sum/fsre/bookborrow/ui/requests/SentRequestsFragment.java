@@ -50,7 +50,7 @@ public class SentRequestsFragment extends Fragment {
 
         bookRepository.getMySentRequests(
                 currentUserId,
-                "*,book:books(name,author)"
+                "*,book:books(name,author,image_url)"
         ).enqueue(new Callback<List<RequestBook>>() {
             @Override
             public void onResponse(Call<List<RequestBook>> call, Response<List<RequestBook>> response) {

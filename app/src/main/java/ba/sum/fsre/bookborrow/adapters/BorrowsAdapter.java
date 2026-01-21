@@ -115,6 +115,7 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
                     .error(R.drawable.ic_book)
                     .into(holder.ivBookImage);
         }
+
         String currentUserId = userRepository.getCurrentUserId();
         String ownerId = borrow.has("owner_id") && !borrow.get("owner_id").isJsonNull()
                 ? borrow.get("owner_id").getAsString() : "";

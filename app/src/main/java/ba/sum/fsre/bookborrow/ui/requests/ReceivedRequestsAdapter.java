@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +63,18 @@ public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedReques
         if (request.getBook() != null) {
             holder.tvRequestBook.setText(request.getBook().getName());
             holder.tvRequestAuthor.setText(request.getBook().getAuthor());
+
+            String imageUrl = request.getBook().getImageUrl();
+            Glide.with(holder.itemView.getContext()).clear(holder.tvBookImage);
+            holder.tvBookImage.setImageResource(R.drawable.ic_book);
+
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Glide.with(holder.itemView.getContext())
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_book)
+                        .error(R.drawable.ic_book)
+                        .into(holder.tvBookImage);
+            }
         }
 
         userRepository.getUserProfile(request.getRequesterId())
@@ -102,7 +118,7 @@ public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedReques
         TextView tvRequestStatus;
         Button btnAccept;
         Button btnRejected;
-
+        ImageView tvBookImage;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvRequestUser = itemView.findViewById(R.id.requestUser);
@@ -111,6 +127,7 @@ public class ReceivedRequestsAdapter extends RecyclerView.Adapter<ReceivedReques
             tvRequestStatus = itemView.findViewById(R.id.requestStatus);
             btnAccept = itemView.findViewById(R.id.btnAccept);
             btnRejected = itemView.findViewById(R.id.btnRejected);
+            tvBookImage = itemView.findViewById(R.id.bookImage);
         }
     }
 

@@ -20,8 +20,14 @@ public class RequestBook {
         private String name;
         private String author;
 
+        @SerializedName("image_url")
+        private String imageUrl;
+
         public String getName() { return name; }
         public String getAuthor() { return author; }
+        public String getImageUrl() {
+            return imageUrl;
+        }
     }
 
     public Book getBook() { return book; }
