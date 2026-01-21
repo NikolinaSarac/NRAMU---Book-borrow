@@ -71,7 +71,7 @@ public class AllBooksActivity extends BaseActivity {
         RetrofitClientService.getInstance()
                 .getApi()
                 // filtriraj da ne dobiješ svoje knjige
-                .getAllBooks(authHeader, "*", "neq." + myUserId)
+                .getAllBooksWithAvailableStatus(authHeader, "*", "neq." + myUserId)
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {

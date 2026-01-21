@@ -24,32 +24,33 @@
         android:padding="24dp">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_book" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All Books"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#4E342E"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="All Books"
+            android:textColor="#4E342E"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <!-- Content card -->
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="364dp"
+            android:layout_height="600dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/card_dashboard"
             android:padding="8dp"
-            android:paddingBottom="56dp">
+            android:paddingBottom="42dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBooks"
@@ -62,11 +63,11 @@
                 android:id="@+id/tvEmpty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="No available books."
                 android:textColor="#4E342E"
                 android:textSize="16sp"
-                android:visibility="gone"
-                android:layout_gravity="center" />
+                android:visibility="gone" />
 
         </FrameLayout>
 

@@ -1,8 +1,10 @@
 package ba.sum.fsre.bookborrow.ui.requests;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,16 @@ public class SentRequestsAdapter extends RecyclerView.Adapter<SentRequestsAdapte
         this.sentRequests = sentRequests;
     }
 
+    public interface OnReturnClickListener {
+        void onReturn(String requestId);
+    }
+
+    private OnReturnClickListener onReturnClickListener;
+
+    public void setOnReturnClickListener(OnReturnClickListener listener) {
+        this.onReturnClickListener = listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +48,28 @@ public class SentRequestsAdapter extends RecyclerView.Adapter<SentRequestsAdapte
         RequestBook request = sentRequests.get(position);
         holder.tvSentRequestBook.setText(request.getBook().getName());
         holder.tvSentRequestAuthor.setText(request.getBook().getAuthor());
-        holder.tvStatus.setText(request.getStatus());
+
+        if ("approved".equals(request.getStatus())) {
+            holder.btnReturn.setVisibility(View.VISIBLE);
+            holder.btnReturn.setOnClickListener(v -> {
+                if (onReturnClickListener != null) {
+                    onReturnClickListener.onReturn(request.getId());
+                }
+            });
+        } else {
+            holder.btnReturn.setVisibility(View.GONE);
+            holder.btnReturn.setOnClickListener(null);
+        }
+
+        if("pending".equals(request.getStatus())){
+            holder.tvStatus.setText("Pending");
+            holder.tvStatus.setTextColor(Color.parseColor("#F9A825"));
+        } else if ("approved".equals(request.getStatus())) {
+            holder.tvStatus.setText("Approved");
+            holder.tvStatus.setTextColor(Color.parseColor("#2E7D32"));
+        }else {
+            holder.tvStatus.setText(request.getStatus());
+        }
 
         String imageUrl = request.getBook().getImageUrl();
         Glide.with(holder.itemView.getContext()).clear(holder.tvBookImage);
@@ -61,13 +94,14 @@ public class SentRequestsAdapter extends RecyclerView.Adapter<SentRequestsAdapte
         TextView tvSentRequestAuthor;
         TextView tvStatus;
         ImageView tvBookImage;
-
+        Button btnReturn;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSentRequestBook = itemView.findViewById(R.id.sentRequestBook);
             tvSentRequestAuthor = itemView.findViewById(R.id.sentRequestAuthor);
             tvStatus = itemView.findViewById(R.id.sentRequestStatus);
             tvBookImage = itemView.findViewById(R.id.sentRequestImage);
+            btnReturn = itemView.findViewById(R.id.btnReturn);
         }
     }
 }

@@ -51,11 +51,11 @@
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="56dp"
+            android:layout_height="500dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/card_dashboard"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:paddingBottom="56dp" />
 
     </LinearLayout>
 

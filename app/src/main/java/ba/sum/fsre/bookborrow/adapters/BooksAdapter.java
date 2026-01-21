@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -83,8 +84,12 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
                 ? book.get("description").getAsString()
                 : "";
 
-        boolean available = book.has("available") && !book.get("available").isJsonNull()
-                && book.get("available").getAsBoolean();
+        String availabilityStatus = null;
+        boolean isAvailable;
+
+        if (book.has("availability_status") && !book.get("availability_status").isJsonNull()) {
+            availabilityStatus = book.get("availability_status").getAsString();
+        }
 
         String imageUrl = book.has("image_url") && !book.get("image_url").isJsonNull()
                 ? book.get("image_url").getAsString()
@@ -92,7 +97,22 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
         holder.tvTitle.setText(name);
         holder.tvAuthor.setText(author);
-        holder.tvStatus.setText(available ? "Available" : "Borrowed");
+
+        if ("available".equals(availabilityStatus)) {
+            holder.tvStatus.setText("Available");
+            isAvailable = true;
+
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#2E7D32"));
+            holder.tvStatus.setBackgroundResource(R.drawable.bg_status_available);
+
+        } else {
+            holder.tvStatus.setText("Borrowed");
+            isAvailable = false;
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#C62828"));
+            holder.tvStatus.setBackgroundResource(R.drawable.bg_status_borrowed);
+
+            holder.root.setBackgroundResource(R.drawable.card_book_borrowed);
+        }
 
         // ===== IMAGE (sprječava krive slike) =====
         Glide.with(holder.itemView.getContext()).clear(holder.ivBookImage);
@@ -120,14 +140,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
                     i.putExtra(EditBookActivity.EXTRA_NAME, name);
                     i.putExtra(EditBookActivity.EXTRA_AUTHOR, author);
                     i.putExtra(EditBookActivity.EXTRA_DESCRIPTION, description);
-
-                    // ✅ KLJUČNO: pošalji i trenutni image_url da Edit ekran može prikazati staru sliku
                     i.putExtra(EditBookActivity.EXTRA_IMAGE_URL, imageUrl);
 
                     v.getContext().startActivity(i);
                 });
 
-                // spriječi da klik na edit otvori details
                 holder.btnEdit.setClickable(true);
             }
 
@@ -148,7 +165,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         // ===== REQUEST BUTTON – samo AllBooks =====
         if (holder.btnRequest != null) {
             // request ima smisla samo ako je showRequest i knjiga je available
-            boolean shouldShowRequest = showRequest && available;
+            boolean shouldShowRequest = showRequest && isAvailable;
 
             holder.btnRequest.setVisibility(shouldShowRequest ? View.VISIBLE : View.GONE);
 
@@ -190,7 +207,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             intent.putExtra(BookDetailsActivity.EXTRA_NAME, name);
             intent.putExtra(BookDetailsActivity.EXTRA_AUTHOR, author);
             intent.putExtra(BookDetailsActivity.EXTRA_DESCRIPTION, description);
-            intent.putExtra(BookDetailsActivity.EXTRA_AVAILABLE, available);
+            intent.putExtra(BookDetailsActivity.EXTRA_AVAILABLE, isAvailable);
             intent.putExtra("image_url", imageUrl);
 
             // korisno za details/request kasnije:
@@ -227,6 +244,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
         Button btnRequest;
 
+        LinearLayout root;
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -240,6 +258,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             btnDelete = itemView.findViewById(R.id.btnDelete);
 
             btnRequest = itemView.findViewById(R.id.btnRequest);
+            root = itemView.findViewById(R.id.bookCardRoot);
         }
     }
 }
