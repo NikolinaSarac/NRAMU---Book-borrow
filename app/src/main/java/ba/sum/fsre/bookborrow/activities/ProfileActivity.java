@@ -276,7 +276,7 @@ public class ProfileActivity extends BaseActivity {
 
         RetrofitClientService.getInstance()
                 .getApi()
-                .getMyBooks(authHeader, "*", "eq." + userId)
+                .getMyBooksFromAvailableBooksView(authHeader, "*", "eq." + userId)
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {
@@ -339,7 +339,7 @@ public class ProfileActivity extends BaseActivity {
 
         String select = "id,status,owner_id,requester_id,first_name,last_name,address,postal_code,city,shipping_note,created_at,book:books(name,author,image_url)";
         String orFilter = "(requester_id.eq." + userId + ",owner_id.eq." + userId + ")";
-        String statusFilter = "eq.approved";
+        String statusFilter = "in.(returned,approved)";
         String order = "created_at.desc";
 
         RetrofitClientService.getInstance()

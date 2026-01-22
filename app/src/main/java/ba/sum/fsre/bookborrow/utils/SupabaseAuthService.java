@@ -164,6 +164,12 @@ public interface SupabaseAuthService {
             @Query("user_id") String userFilter
     );
 
+    @GET("rest/v1/books_with_availability")
+    Call<List<JsonObject>> getMyBooksFromAvailableBooksView(
+            @Header("Authorization") String auth,
+            @Query("select") String select,
+            @Query("user_id") String userFilter
+    );
     @Headers({
             "Content-Type: application/json",
             "apikey: sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e"
