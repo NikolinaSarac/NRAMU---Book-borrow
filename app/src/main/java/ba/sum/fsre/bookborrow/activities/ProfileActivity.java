@@ -305,8 +305,8 @@ public class ProfileActivity extends BaseActivity {
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
 
-        String select = "id,status,owner_id,requester_id,address,postal_code,city,description,book:books(name,author,image_url)";
-        String orFilter = "or(borrower_id.eq.'" + userId + "',owner_id.eq.'" + userId + "')";
+        String select = "id,status,owner_id,requester_id,address,postal_code,city,shipping_note,book:books(name,author,image_url)";
+        String orFilter = "(requester_id.eq." + userId + ",owner_id.eq." + userId + ")";
         String statusFilter = "status=in.(approved,returned,completed)";
 
 

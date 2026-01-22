@@ -85,6 +85,13 @@ public interface SupabaseAuthService {
             @Query("user_id") String userFilter
     );
 
+    @GET("rest/v1/books_with_availability")
+    Call<List<JsonObject>> getAllBooksWithAvailableStatus(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter
+    );
+
     @POST("rest/v1/books")
     Call<Void> createBook(
             @Header("Authorization") String token,

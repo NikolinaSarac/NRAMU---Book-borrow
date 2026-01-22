@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ba.sum.fsre.bookborrow.models.RequestBook;
 import ba.sum.fsre.bookborrow.repository.BookRepository;
@@ -28,6 +30,8 @@ public class SentRequestsFragment extends Fragment {
     private RecyclerView recyclerView;
     private SentRequestsAdapter adapter;
     private BookRepository bookRepository;
+    private final List<RequestBook> requestList = new ArrayList<>();
+    private String currentUserId;
 
     @Nullable
     @Override
@@ -37,20 +41,54 @@ public class SentRequestsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_sent_requests, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.rvSentRequests);
+        recyclerView = view.findViewById(R.id.rvSentRequests);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<RequestBook> requestList = new ArrayList<>();
         adapter = new SentRequestsAdapter(requestList);
         recyclerView.setAdapter(adapter);
 
         bookRepository = new BookRepository(getContext());
         AuthManager authManager = new AuthManager(getContext());
-        String currentUserId = authManager.getUserId();
+        currentUserId = authManager.getUserId();
+
+        adapter.setOnReturnClickListener(requestId -> {
+            Log.d("SentRequests", "Return clicked for requestId=" + requestId);
+
+            Map<String, String> body = new HashMap<>();
+            body.put("status", "returned");
+
+            bookRepository.updateBookRequestStatus(requestId, body)
+                    .enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                loadSentRequests(); // ✅ refresh
+                            } else {
+                                Log.e("SentRequests", "Return failed, code=" + response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("SentRequests", "Return API error", t);
+                        }
+                    });
+        });
+
+        loadSentRequests();
+
+        return view;
+    }
+
+    private void loadSentRequests() {
+        if (currentUserId == null) {
+            Log.e("SentRequests", "currentUserId is null");
+            return;
+        }
 
         bookRepository.getMySentRequests(
                 currentUserId,
-                "*,book:books(name,author)"
+                "*,book:books(name,author,image_url)"
         ).enqueue(new Callback<List<RequestBook>>() {
             @Override
             public void onResponse(Call<List<RequestBook>> call, Response<List<RequestBook>> response) {
@@ -59,7 +97,7 @@ public class SentRequestsFragment extends Fragment {
                     requestList.addAll(response.body());
                     adapter.notifyDataSetChanged();
                 } else {
-                    Log.e("SentRequests", "Response not successful");
+                    Log.e("SentRequests", "Response not successful, code=" + response.code());
                 }
             }
 
@@ -68,7 +106,5 @@ public class SentRequestsFragment extends Fragment {
                 Log.e("SentRequests", "API call failed", t);
             }
         });
-
-        return view;
     }
 }

@@ -13,26 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
+        <!-- Image -->
         <ImageView
             android:id="@+id/sentRequestImage"
-            android:layout_width="80dp"
-            android:layout_height="120dp"
+            android:layout_width="60dp"
+            android:layout_height="65dp"
+            android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_book"
-            android:contentDescription="Book Image"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/book_image_background"/>
+            android:background="@drawable/book_image_background"
+            android:contentDescription="Book Image"/>
 
-        <!-- Podaci o knjizi -->
+        <!-- Book info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- Ime knjige -->
             <TextView
                 android:id="@+id/sentRequestBook"
                 android:layout_width="wrap_content"
@@ -42,7 +43,6 @@
                 android:textStyle="bold"
                 android:textColor="#333333"/>
 
-            <!-- Autor knjige -->
             <TextView
                 android:id="@+id/sentRequestAuthor"
                 android:layout_width="wrap_content"
@@ -52,16 +52,29 @@
                 android:textColor="#777777"
                 android:layout_marginTop="2dp"/>
 
-            <!-- Status zahtjeva -->
             <TextView
                 android:id="@+id/sentRequestStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status: Pending"
                 android:textSize="14sp"
-                android:textColor="#1E88E5"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp"
+                android:textColor="#1E88E5"/>
         </LinearLayout>
 
+        <!-- RETURN BUTTON -->
+        <Button
+            android:id="@+id/btnReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="12dp"
+            android:text="Return"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="14dp"
+            android:backgroundTint="#2E7D32"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
