@@ -85,12 +85,61 @@ public interface SupabaseAuthService {
             @Query("user_id") String userFilter
     );
 
+    @GET("rest/v1/borrowing_requests")
+    Call<List<JsonObject>> getBorrowingRequestsByStatus(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("or") String orFilter,
+            @Query("status") String statusFilter,
+            @Query("order") String order
+    );
+
+
     @GET("rest/v1/books_with_availability")
     Call<List<JsonObject>> getAllBooksWithAvailableStatus(
             @Header("Authorization") String token,
             @Query("select") String select,
             @Query("user_id") String userFilter
     );
+
+    @GET("rest/v1/books")
+    Call<List<JsonObject>> getAllBooksPaged(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
+
+    @GET("rest/v1/books")
+    Call<List<JsonObject>> searchBooksPaged(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter,
+            @Query("or") String orFilter,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
+
+    @GET("rest/v1/books_with_availability")
+    Call<List<JsonObject>> getAllBooksWithAvailableStatusPaged(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
+
+    @GET("rest/v1/books_with_availability")
+    Call<List<JsonObject>> searchBooksWithAvailableStatusPaged(
+            @Header("Authorization") String token,
+            @Query("select") String select,
+            @Query("user_id") String userFilter,
+            @Query("or") String orFilter,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
+
 
     @POST("rest/v1/books")
     Call<Void> createBook(

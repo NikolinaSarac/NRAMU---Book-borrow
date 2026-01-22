@@ -135,6 +135,10 @@
                     android:backgroundTint="#4E342E"
                     android:textColor="@android:color/white" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp" />
+
             </LinearLayout>
 
             <View

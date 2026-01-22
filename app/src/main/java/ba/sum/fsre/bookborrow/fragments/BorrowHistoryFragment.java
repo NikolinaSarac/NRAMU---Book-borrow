@@ -23,26 +23,34 @@ public class BorrowHistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private BorrowsAdapter adapter;
-    private List<JsonObject> borrowHistoryList = new ArrayList<>();
+    private final List<JsonObject> borrowHistoryList = new ArrayList<>();
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         View view = inflater.inflate(R.layout.fragment_borrow_history, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewHistory);
-        adapter = new BorrowsAdapter(getContext(),borrowHistoryList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        adapter = new BorrowsAdapter(requireContext(), borrowHistoryList, false);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
     public void setBorrowHistory(List<JsonObject> newHistory) {
-        if (adapter != null) {
-            borrowHistoryList.clear();
+        borrowHistoryList.clear();
+        if (newHistory != null) {
             borrowHistoryList.addAll(newHistory);
+        }
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }

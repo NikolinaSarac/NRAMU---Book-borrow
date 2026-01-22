@@ -30,8 +30,8 @@ public class AllRequestsActivity extends BaseActivity {
                     .commit();
         }
 
-        tabLayout.addTab(tabLayout.newTab().setText("Primljeni"));
-        tabLayout.addTab(tabLayout.newTab().setText("Poslani"));
+        tabLayout.addTab(tabLayout.newTab().setText("Received"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sent"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

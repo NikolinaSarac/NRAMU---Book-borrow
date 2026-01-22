@@ -23,7 +23,7 @@ public class ActiveBorrowsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private BorrowsAdapter adapter;
-    private List<JsonObject> activeBorrowsList = new ArrayList<>();
+    private final List<JsonObject> activeBorrowsList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -32,7 +32,7 @@ public class ActiveBorrowsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_active_borrows, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewActive);
-        adapter = new BorrowsAdapter(getContext(),activeBorrowsList);
+        adapter = new BorrowsAdapter(requireContext(), activeBorrowsList, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -40,10 +40,8 @@ public class ActiveBorrowsFragment extends Fragment {
     }
 
     public void setActiveBorrows(List<JsonObject> newBorrows) {
-        if (adapter != null) {
-            activeBorrowsList.clear();
-            activeBorrowsList.addAll(newBorrows);
-            adapter.notifyDataSetChanged();
-        }
+        activeBorrowsList.clear();
+        if (newBorrows != null) activeBorrowsList.addAll(newBorrows);
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 }

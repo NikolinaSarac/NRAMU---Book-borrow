@@ -27,9 +27,9 @@ import ba.sum.fsre.bookborrow.fragments.BorrowRequestDetailsDialogFragment;
 import ba.sum.fsre.bookborrow.models.Profile;
 import ba.sum.fsre.bookborrow.repository.BookRepository;
 import ba.sum.fsre.bookborrow.repository.UserRepository;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Call;
 
 public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowViewHolder> {
 
@@ -38,11 +38,14 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
     private final BookRepository bookRepository;
     private final Context context;
 
-    public BorrowsAdapter(Context context,List<JsonObject> borrows) {
+    private final boolean showCompleteAction;
+
+    public BorrowsAdapter(Context context, List<JsonObject> borrows, boolean showCompleteAction) {
         this.context = context;
         this.borrows = borrows;
         this.userRepository = new UserRepository(context);
         this.bookRepository = new BookRepository(context);
+        this.showCompleteAction = showCompleteAction;
     }
 
     @NonNull
@@ -56,18 +59,17 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
     @Override
     public void onBindViewHolder(@NonNull BorrowViewHolder holder, int position) {
         JsonObject borrow = borrows.get(position);
-        holder.tvStatus.setText(
-                borrow.has("status") && !borrow.get("status").isJsonNull()
-                        ? borrow.get("status").getAsString()
-                        : "-"
-        );
+
+        String status = borrow.has("status") && !borrow.get("status").isJsonNull()
+                ? borrow.get("status").getAsString()
+                : "-";
+        holder.tvStatus.setText(status);
 
         if (borrow.has("book") && borrow.get("book").isJsonObject()) {
-            JsonObject book = borrow.getAsJsonObject("book");
-
+            JsonObject bookObj = borrow.getAsJsonObject("book");
             holder.tvBook.setText(
-                    book.has("name") && !book.get("name").isJsonNull()
-                            ? book.get("name").getAsString()
+                    bookObj.has("name") && !bookObj.get("name").isJsonNull()
+                            ? bookObj.get("name").getAsString()
                             : "-"
             );
         } else {
@@ -99,8 +101,10 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
             holder.tvOwner.setText("-");
         }
 
+        JsonObject book = borrow.has("book") && borrow.get("book").isJsonObject()
+                ? borrow.getAsJsonObject("book")
+                : new JsonObject();
 
-        JsonObject book = borrow.getAsJsonObject("book");
         String imageUrl = book.has("image_url") && !book.get("image_url").isJsonNull()
                 ? book.get("image_url").getAsString()
                 : null;
@@ -118,23 +122,25 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
 
         String currentUserId = userRepository.getCurrentUserId();
         String ownerId = borrow.has("owner_id") && !borrow.get("owner_id").isJsonNull()
-                ? borrow.get("owner_id").getAsString() : "";
+                ? borrow.get("owner_id").getAsString()
+                : "";
 
-        if (currentUserId.equals(ownerId)) {
-            holder.btnEditBorrow.setVisibility(View.VISIBLE);
-        } else {
-            holder.btnEditBorrow.setVisibility(View.GONE);
+        boolean canComplete = showCompleteAction && currentUserId != null && currentUserId.equals(ownerId);
+
+        holder.btnEditBorrow.setVisibility(canComplete ? View.VISIBLE : View.GONE);
+        holder.btnEditBorrow.setOnClickListener(null);
+
+        if (canComplete) {
+            holder.btnEditBorrow.setOnClickListener(v -> {
+                new AlertDialog.Builder(context)
+                        .setTitle("Mark as Completed")
+                        .setMessage("Do you want to mark this borrow as completed?")
+                        .setPositiveButton("Yes", (dialog, which) ->markBorrowCompleted(borrow, holder.getAdapterPosition()))
+                                .setNegativeButton("No", null)
+                        .show();
+            });
         }
 
-        // --- 2️⃣ Klik na edit → AlertDialog (novi kod)
-        holder.btnEditBorrow.setOnClickListener(v -> {
-            new AlertDialog.Builder(context)
-                    .setTitle("Mark as Completed")
-                    .setMessage("Do you want to mark this borrow as completed?")
-                    .setPositiveButton("Yes", (dialog, which) -> markBorrowCompleted(borrow, position))
-                    .setNegativeButton("No", null)
-                    .show();
-        });
         holder.itemView.setOnClickListener(v -> {
             FragmentActivity activity = null;
             Context ctx = v.getContext();
@@ -152,13 +158,14 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
                     BorrowRequestDetailsDialogFragment.newInstance(borrow);
             dialog.show(activity.getSupportFragmentManager(), "BorrowRequestDetails");
         });
-
-
-
     }
 
     private void markBorrowCompleted(JsonObject borrow, int position) {
-        String borrowId = borrow.has("id") ? borrow.get("id").getAsString() : null;
+        if (position == RecyclerView.NO_POSITION) return;
+
+        String borrowId = borrow.has("id") && !borrow.get("id").isJsonNull()
+                ? borrow.get("id").getAsString()
+                : null;
         if (borrowId == null) return;
 
         Map<String, String> body = new HashMap<>();
@@ -169,8 +176,10 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            borrows.remove(position);
-                            notifyItemRemoved(position);
+                            if (position >= 0 && position < borrows.size()) {
+                                borrows.remove(position);
+                                notifyItemRemoved(position);
+                            }
                             Toast.makeText(context, "Borrow marked as completed", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -186,13 +195,14 @@ public class BorrowsAdapter extends RecyclerView.Adapter<BorrowsAdapter.BorrowVi
 
     @Override
     public int getItemCount() {
-        return borrows.size();
+        return borrows != null ? borrows.size() : 0;
     }
 
     static class BorrowViewHolder extends RecyclerView.ViewHolder {
         TextView tvBook, tvStatus, tvOwner;
         ImageView ivBookImage;
         ImageButton btnEditBorrow;
+
         public BorrowViewHolder(@NonNull View itemView) {
             super(itemView);
             tvBook = itemView.findViewById(R.id.tvBorrowBook);
