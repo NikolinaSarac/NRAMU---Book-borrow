@@ -11,6 +11,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Query;
+
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -34,12 +43,59 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     private final boolean showActions; // edit/delete
     private final boolean showRequest; // request button
 
+    private final List<JsonObject> allBooks = new ArrayList<>();
+
+
     public BooksAdapter(List<JsonObject> books, boolean showActions, boolean showRequest) {
         this.books = books;
         this.showActions = showActions;
         this.showRequest = showRequest;
+        allBooks.clear();
+        allBooks.addAll(this.books);
+
         setHasStableIds(true);
     }
+
+    public void setData(List<JsonObject> newBooks) {
+        List<JsonObject> copy = new ArrayList<>();
+        if (newBooks != null) copy.addAll(newBooks);
+
+        books.clear();
+        allBooks.clear();
+
+        books.addAll(copy);
+        allBooks.addAll(copy);
+
+        notifyDataSetChanged();
+    }
+    //za serach
+    public void filter(String query) {
+        String q = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+
+        books.clear();
+
+        if (q.isEmpty()) {
+            books.addAll(allBooks);
+        } else {
+            for (JsonObject book : allBooks) {
+                String name = (book.has("name") && !book.get("name").isJsonNull())
+                        ? book.get("name").getAsString()
+                        : "";
+
+                String author = (book.has("author") && !book.get("author").isJsonNull())
+                        ? book.get("author").getAsString()
+                        : "";
+
+                if (name.toLowerCase(Locale.ROOT).contains(q) || author.toLowerCase(Locale.ROOT).contains(q)) {
+                    books.add(book);
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+
 
     // ===== DELETE CALLBACK =====
     public interface OnDeleteClickListener {

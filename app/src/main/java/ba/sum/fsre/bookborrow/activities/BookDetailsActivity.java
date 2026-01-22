@@ -59,10 +59,12 @@ public class BookDetailsActivity extends BaseActivity {
 
 
         if (available) {
-            tvStatus.setText("AVAILABLE");
+            tvStatus.setText("Available");
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#2E7D32"));
             tvStatus.setBackgroundResource(R.drawable.bg_status_available);
         } else {
-            tvStatus.setText("BORROWED");
+            tvStatus.setText("Borrowed");
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#C62828"));
             tvStatus.setBackgroundResource(R.drawable.bg_status_borrowed);
         }
 

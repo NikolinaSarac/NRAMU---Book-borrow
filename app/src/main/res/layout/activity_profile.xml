@@ -95,6 +95,11 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/card_dashboard"/>
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="44dp" />
+
         <!-- Logout -->
 
     </LinearLayout>

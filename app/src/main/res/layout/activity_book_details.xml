@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- NE DIRAMO POZADINU -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         android:src="@drawable/bg_dashboard" />
 
     <View
@@ -25,8 +26,8 @@
             android:id="@+id/btnBack"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@android:color/transparent"
             android:layout_gravity="start"
+            android:background="@android:color/transparent"
             app:srcCompat="@drawable/ic_back2"
             app:tint="#1E88E5" />
 
@@ -40,14 +41,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book details"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#4E342E"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:text="Book details"
+            android:textColor="#4E342E"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
+        <!-- KARTICA -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -65,57 +67,117 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvTitle"
+                    <!-- GORNJI DIO: Cover + Info -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#4E342E" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tvAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textSize="16sp"
-                        android:textColor="#6D4C41" />
+                        <!-- IMAGE (cover) - isti ID -->
+                        <ImageView
+                            android:id="@+id/ivBookImage"
+                            android:layout_width="110dp"
+                            android:layout_height="160dp"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/bg_status_badge"
+                            android:src="@drawable/ic_book" />
 
-                    <TextView
-                        android:id="@+id/tvStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:paddingHorizontal="14dp"
-                        android:paddingVertical="6dp"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="14dp">
 
-                    <ImageView
-                        android:id="@+id/ivBookImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="12dp"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/bg_status_badge"
-                        android:src="@drawable/ic_book" />
+                            <!-- LABEL: Naziv (manji, kao caption) -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Naziv"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:textColor="#6D4C41" />
 
+                            <!-- VALUE: Title - isti ID -->
+                            <TextView
+                                android:id="@+id/tvTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="#4E342E"
+                                android:maxLines="2" />
 
+                            <!-- LABEL: Autor (manji) -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:text="Ime autora"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:textColor="#6D4C41" />
+
+                            <!-- VALUE: Author - isti ID -->
+                            <TextView
+                                android:id="@+id/tvAuthor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textSize="16sp"
+                                android:textColor="#6D4C41"
+                                android:maxLines="2" />
+
+                            <!-- STATUS (badge) - isti ID -->
+                            <TextView
+                                android:id="@+id/tvStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="6dp"
+                                android:text="Available"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:background="@drawable/bg_status_available"
+                                android:textColor="#2E7D32" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="16dp"
                         android:background="#E0E0E0" />
 
+                    <!-- DETALJI -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Detalji:"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#4E342E" />
+
+                    <!-- VALUE: Description - isti ID -->
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:textSize="15sp"
                         android:textColor="#4E342E"
                         android:lineSpacingExtra="4dp" />
+
+                    <!-- malo prostora na dnu -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
 
                 </LinearLayout>
             </ScrollView>

@@ -110,7 +110,7 @@ public class ProfileActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (tabLayout != null && tabLayout.getSelectedTabPosition() == 0) {
-            loadMyBooks(); // ✅ refresh nakon edit-a
+            loadMyBooks(); //
         }
     }
 
@@ -295,8 +295,7 @@ public class ProfileActivity extends BaseActivity {
                 });
     }
 
-    private void loadBooksHistory()
-    {
+    private void loadBooksHistory() {
         String token = authManager.getToken();
         if (token == null || token.isEmpty()) return;
 
@@ -305,39 +304,31 @@ public class ProfileActivity extends BaseActivity {
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
 
-        String select = "id,status,owner_id,requester_id,address,postal_code,city,shipping_note,book:books(name,author,image_url)";
+        String select = "id,status,owner_id,requester_id,first_name,last_name,address,postal_code,city,shipping_note,created_at,book:books(name,author,image_url)";
         String orFilter = "(requester_id.eq." + userId + ",owner_id.eq." + userId + ")";
-        String statusFilter = "status=in.(approved,returned,completed)";
-
+        String statusFilter = "in.(returned,completed)";
+        String order = "created_at.desc";
 
         RetrofitClientService.getInstance()
                 .getApi()
-                .getMyBooksHistory(
-                        authHeader,
-                        null,
-                        select,
-                        orFilter + "&" + statusFilter
-                )
+                .getBorrowingRequestsByStatus(authHeader, select, orFilter, statusFilter, order)
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {
                         cachedHistory.clear();
-                        cachedHistory.addAll(response);
-
+                        if (response != null) cachedHistory.addAll(response);
                         borrowHistoryFragment.setBorrowHistory(cachedHistory);
-
-                        attachMyBooksActionsSafely();
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        Log.e(TAG, "loadMyBooks error: " + errorMessage);
+                        Log.e(TAG, "loadBooksHistory error: " + errorMessage);
                     }
                 });
     }
 
-    private void loadActiveBooks()
-    {
+
+    private void loadActiveBooks() {
         String token = authManager.getToken();
         if (token == null || token.isEmpty()) return;
 
@@ -345,39 +336,30 @@ public class ProfileActivity extends BaseActivity {
 
         String userId = authManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
-        String userIdQuoted = "'" + userId + "'";
 
-        String orFilter = "or.(borrower_id.eq." + userIdQuoted + ",owner_id.eq." + userIdQuoted + ")";
-        String encodedOrFilter = Uri.encode(orFilter);
+        String select = "id,status,owner_id,requester_id,first_name,last_name,address,postal_code,city,shipping_note,created_at,book:books(name,author,image_url)";
+        String orFilter = "(requester_id.eq." + userId + ",owner_id.eq." + userId + ")";
         String statusFilter = "eq.approved";
-
-
-        String select = "*,book:books(name,author,image_url)";
+        String order = "created_at.desc";
 
         RetrofitClientService.getInstance()
                 .getApi()
-                .getActiveBorrows(
-                        authHeader,
-                        null,
-                        statusFilter,
-                        select + "&or=" + encodedOrFilter
-                )
+                .getBorrowingRequestsByStatus(authHeader, select, orFilter, statusFilter, order)
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {
                         cachedActive.clear();
-                        cachedActive.addAll(response);
-
+                        if (response != null) cachedActive.addAll(response);
                         activeBorrowsFragment.setActiveBorrows(cachedActive);
-
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        Log.e(TAG, "loadMyBooks error: " + errorMessage);
+                        Log.e(TAG, "loadActiveBooks error: " + errorMessage);
                     }
                 });
     }
+
 
     private void logout() {
         authManager.logout();
