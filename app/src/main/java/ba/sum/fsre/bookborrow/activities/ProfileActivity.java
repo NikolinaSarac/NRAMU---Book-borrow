@@ -276,7 +276,7 @@ public class ProfileActivity extends BaseActivity {
 
         RetrofitClientService.getInstance()
                 .getApi()
-                .getMyBooks(authHeader, "*", "eq." + userId)
+                .getMyBooksFromAvailableBooksView(authHeader, "*", "eq." + userId)
                 .enqueue(new ApiCallback<List<JsonObject>>() {
                     @Override
                     public void onSuccess(List<JsonObject> response) {
