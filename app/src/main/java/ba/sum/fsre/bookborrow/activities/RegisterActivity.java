@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -11,16 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonObject;
+
 import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
-import com.google.gson.JsonObject;
 import ba.sum.fsre.bookborrow.utils.RetrofitClient;
 import ba.sum.fsre.bookborrow.utils.SupabaseAuthService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -30,6 +30,10 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private TextView tvLoginLink;
 
+    private TextView tvOpenPrivacy, tvOpenTerms;
+
+
+    private CheckBox cbTerms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,30 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnRegister = findViewById(R.id.btnRegister);
+
+        cbTerms = findViewById(R.id.cbTerms);
+
+
+
+        tvOpenPrivacy = findViewById(R.id.tvOpenPrivacy);
+        tvOpenTerms = findViewById(R.id.tvOpenTerms);
+
+
+        tvOpenPrivacy.setPaintFlags(tvOpenPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvOpenTerms.setPaintFlags(tvOpenTerms.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        tvOpenPrivacy.setOnClickListener(v -> {
+            Intent i = new Intent(RegisterActivity.this, LegalActivity.class);
+            i.putExtra(LegalActivity.EXTRA_TYPE, LegalActivity.TYPE_PRIVACY);
+            startActivity(i);
+        });
+
+        tvOpenTerms.setOnClickListener(v -> {
+            Intent i = new Intent(RegisterActivity.this, LegalActivity.class);
+            i.putExtra(LegalActivity.EXTRA_TYPE, LegalActivity.TYPE_TERMS);
+            startActivity(i);
+        });
+
 
         btnRegister.setOnClickListener(v -> registerUser());
 
@@ -71,6 +99,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (!cbTerms.isChecked()) {
+            Toast.makeText(this, "You must accept Terms & Privacy", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         JsonObject body = new JsonObject();
         body.addProperty("email", email);
         body.addProperty("password", password);
@@ -85,8 +118,11 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
-                    String accessToken = response.body().get("access_token").getAsString();
-                    authManager.saveToken(accessToken);
+                    if (response.body().has("access_token") && !response.body().get("access_token").isJsonNull()) {
+                        String accessToken = response.body().get("access_token").getAsString();
+                        authManager.saveToken(accessToken);
+                    }
+
                     authManager.saveEmail(email);
 
                     Toast.makeText(RegisterActivity.this,
@@ -106,5 +142,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
 }

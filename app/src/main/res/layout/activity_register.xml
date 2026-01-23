@@ -145,5 +145,39 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"/>
+
+        <CheckBox
+            android:id="@+id/cbTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I accept Terms of Use &amp; Privacy Policy"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tvOpenPrivacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacy Policy"
+            android:textColor="@android:color/holo_blue_dark"
+            android:paddingTop="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/tvOpenTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Terms of Use"
+            android:textColor="@android:color/holo_blue_dark"
+            android:paddingTop="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+
+
+
+
+
+
     </LinearLayout>
 </FrameLayout>
