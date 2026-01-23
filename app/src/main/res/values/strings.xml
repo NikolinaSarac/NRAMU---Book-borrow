@@ -1,3 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Book Borrow</string>
+
+    <string name="app_name">BookBorrow</string>
+
+    <string name="privacy_policy_text">
+🔐 Privacy Policy\n
+\n
+Book Borrow\n
+\n
+Last updated: 23.1.2026\n
+\n
+1. Introduction\n
+Your privacy is important to us. This Privacy Policy explains how Book Borrow collects, uses, and protects your personal data.\n
+\n
+2. Information We Collect\n
+We may collect the following information:\n
+\n
+- Name and email address\n
+- User ID and authentication data\n
+- Book listings and borrowing activity\n
+- Basic usage data related to the application\n
+\n
+3. How We Use Your Information\n
+We use collected information to:\n
+\n
+- Provide and improve application functionality\n
+- Authenticate users\n
+- Manage borrowing requests\n
+- Ensure application security\n
+\n
+4. Data Storage and Security\n
+User data is securely stored using third-party backend services (e.g. cloud databases). We take reasonable measures to protect personal data from unauthorized access.\n
+\n
+5. Data Sharing\n
+We do not sell or rent user data to third parties. User data is only shared when required to operate the Application or comply with legal obligations.\n
+\n
+6. User Rights\n
+Users have the right to:\n
+\n
+- Access their personal data\n
+- Request correction or deletion of their data\n
+- Delete their account at any time\n
+\n
+7. Cookies and Tracking\n
+Book Borrow does not use cookies for advertising purposes. Basic analytics may be used to improve application performance.\n
+\n
+8. Changes to Privacy Policy\n
+We may update this Privacy Policy from time to time. Any changes will be posted within the Application.\n
+\n
+9. Contact\n
+For privacy-related questions, contact us at:\n
+📧 bookborrow@gmail.com
+    </string>
+
+    <string name="terms_of_use_text">
+📘 Terms of Service\n
+\n
+Book Borrow\n
+\n
+Last updated: 23.1.2026\n
+\n
+1. Introduction\n
+Welcome to Book Borrow (“the Application”). Book Borrow is a mobile application that allows users to list books, request to borrow books from other users, and manage borrowing requests.\n
+\n
+By accessing or using the Application, you agree to be bound by these Terms of Service (“Terms”). If you do not agree with these Terms, you must not use the Application.\n
+\n
+2. User Accounts\n
+To use Book Borrow, users must create an account and provide accurate and complete information. You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.\n
+\n
+3. Use of the Application\n
+Users may:\n
+\n
+- View available books\n
+- Send borrowing requests\n
+- Approve, reject, or return borrowed books according to the application logic\n
+\n
+Users must not:\n
+\n
+- Provide false or misleading information\n
+- Use the application for illegal or unauthorized purposes\n
+- Attempt to manipulate or misuse the borrowing system\n
+\n
+4. Borrowing and Returning Books\n
+Book Borrow acts solely as a platform that connects users. The application does not take responsibility for:\n
+\n
+- The physical condition of books\n
+- Loss or damage of books\n
+- Disputes between users\n
+\n
+All borrowing agreements are made directly between users.\n
+\n
+5. Termination\n
+We reserve the right to suspend or terminate user accounts that violate these Terms or misuse the Application.\n
+\n
+6. Limitation of Liability\n
+Book Borrow is provided “as is” without warranties of any kind. We are not liable for any damages, losses, or disputes arising from the use of the Application.\n
+\n
+7. Changes to Terms\n
+We may update these Terms at any time. Continued use of the Application after changes constitutes acceptance of the updated Terms.\n
+\n
+8. Contact\n
+If you have any questions regarding these Terms, please contact us at:\n
+📧 bookborrow@gmail.com
+    </string>
+
 </resources>
