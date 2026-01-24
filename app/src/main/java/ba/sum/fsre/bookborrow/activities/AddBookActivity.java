@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,11 +33,10 @@ import okhttp3.Response;
 public class AddBookActivity extends BaseActivity {
 
     private static final String SUPABASE_URL = "https://gvqwwllhdvsjtpodlruk.supabase.co";
-    private static final String SUPABASE_API_KEY = "TU_STAVI_SVOJ_ANON_PUBLIC_KEY"; // isti kao u ostalim requestovima
+    private static final String SUPABASE_API_KEY = "sb_publishable_QayxGZsh6CBuXJ1DFXsTXA_OzEMBI0e";
 
     private TextInputEditText etName, etAuthor, etDescription;
     private Button btnCreate, btnPickImage;
-    //private ImageButton btnBack;
 
     private Uri selectedImageUri;
     private ImageView ivPreview;

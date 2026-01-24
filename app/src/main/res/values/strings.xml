@@ -4,7 +4,7 @@
     <string name="app_name">BookBorrow</string>
 
     <string name="privacy_policy_text">
-🔐 Privacy Policy\n
+Privacy Policy\n
 \n
 Book Borrow\n
 \n
@@ -50,11 +50,11 @@ We may update this Privacy Policy from time to time. Any changes will be posted 
 \n
 9. Contact\n
 For privacy-related questions, contact us at:\n
-📧 bookborrow@gmail.com
+nikolina.sarac@fsre.sum.ba
     </string>
 
     <string name="terms_of_use_text">
-📘 Terms of Service\n
+Terms of Service\n
 \n
 Book Borrow\n
 \n
@@ -101,7 +101,7 @@ We may update these Terms at any time. Continued use of the Application after ch
 \n
 8. Contact\n
 If you have any questions regarding these Terms, please contact us at:\n
-📧 bookborrow@gmail.com
+nikolina.sarac@fsre.sum.ba
     </string>
 
 </resources>
