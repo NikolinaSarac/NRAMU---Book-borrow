@@ -247,7 +247,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
                     RequestBookDialogFragment dialog = RequestBookDialogFragment.newInstance(bookId, ownerId);
 
                     // Postavi dijalog u full width da se vidi
-                    dialog.setStyle(DialogFragment.STYLE_NORMAL, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_Alert);
+                    //dialog.setStyle(DialogFragment.STYLE_NORMAL, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_Alert);
                     dialog.show(activity.getSupportFragmentManager(), "RequestBookDialog");
                 });
 
