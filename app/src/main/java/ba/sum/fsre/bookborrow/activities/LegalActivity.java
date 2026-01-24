@@ -1,7 +1,10 @@
 package ba.sum.fsre.bookborrow.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +26,7 @@ public class LegalActivity extends AppCompatActivity {
 
         String type = getIntent().getStringExtra(EXTRA_TYPE);
 
+
         if (TYPE_PRIVACY.equals(type)) {
             tvTitle.setText("Privacy Policy");
             tvContent.setText(R.string.privacy_policy_text);
@@ -30,9 +34,18 @@ public class LegalActivity extends AppCompatActivity {
             tvTitle.setText("Terms of Use");
             tvContent.setText(R.string.terms_of_use_text);
         } else {
-            // fallback ako intent nije poslan
             tvTitle.setText("Legal");
             tvContent.setText(R.string.terms_of_use_text);
         }
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        if (btnBack == null) {
+            throw new RuntimeException("btnBack NOT FOUND in activity_legal.xml");
+        }
+
+        btnBack.setOnClickListener(v -> {
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

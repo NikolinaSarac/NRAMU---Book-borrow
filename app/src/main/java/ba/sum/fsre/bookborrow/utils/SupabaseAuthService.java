@@ -1,11 +1,14 @@
 package ba.sum.fsre.bookborrow.utils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Map;
 
+import ba.sum.fsre.bookborrow.models.IsDeletedRequest;
 import ba.sum.fsre.bookborrow.models.Profile;
+import ba.sum.fsre.bookborrow.models.ProfileShippingModel;
 import ba.sum.fsre.bookborrow.models.RequestBook;
 import ba.sum.fsre.bookborrow.models.requests.RequestForBookModel;
 import retrofit2.Call;
@@ -76,6 +79,19 @@ public interface SupabaseAuthService {
     Call<List<Profile>> getProfile(
             @Header("Authorization") String token,
             @Query("id") String userId
+    );
+
+    @GET("rest/v1/profiles")
+    Call<List<ProfileShippingModel>> getProfileShippingModel(
+            @Header("Authorization") String token,
+            @Query("id") String userId
+    );
+
+    @PATCH("rest/v1/profiles")
+    Call<Void> updateShippingInfo(
+            @Header("Authorization") String token,
+            @Query("id") String userId,
+            @Body ProfileShippingModel request
     );
 
     @GET("rest/v1/books")
@@ -204,6 +220,20 @@ public interface SupabaseAuthService {
             @Header("Authorization") String token,
             @Query("requester_id") String userId,
             @Query("status") String statusFilter,
+            @Query("select") String select
+    );
+
+    @PATCH("rest/v1/profiles")
+    Call<Void> softDeleteProfile(
+            @Header("Authorization") String token,
+            @Query("id") String userId,
+            @Body Map<String, Object> body
+    );
+
+    @GET("rest/v1/profiles")
+    Call<List<IsDeletedRequest>> checkProfileDeleted(
+            @Header("Authorization") String token,
+            @Query("id") String idFilter,
             @Query("select") String select
     );
 }

@@ -13,8 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.List;
+
 import ba.sum.fsre.bookborrow.R;
+import ba.sum.fsre.bookborrow.models.Profile;
+import ba.sum.fsre.bookborrow.models.ProfileShippingModel;
 import ba.sum.fsre.bookborrow.repository.BookRepository;
+import ba.sum.fsre.bookborrow.repository.UserRepository;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +37,7 @@ public class RequestBookDialogFragment extends DialogFragment {
             etPostalCode, etCity, etShippingNote;
 
     private BookRepository repository;
+    private UserRepository userRepository;
     private AuthManager authManager;
 
     // ===== FACTORY METHOD =====
@@ -60,8 +66,10 @@ public class RequestBookDialogFragment extends DialogFragment {
 
         authManager = new AuthManager(requireContext());
         repository = new BookRepository(requireContext());
+        userRepository = new UserRepository(requireContext());
 
         bindViews(view);
+        prefillFromProfile();
         setupButtons(view);
 
         return view;
@@ -124,6 +132,25 @@ public class RequestBookDialogFragment extends DialogFragment {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
+                            userRepository.updateUserProfileShipping(requesterId,
+                                            firstName,
+                                            lastName,
+                                            address,
+                                            postalCode,
+                                            city,
+                                            shippingNote)
+                                    .enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> r) {
+                                            // možeš logirati, ali nije obavezno
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            // možeš logirati, ali nije obavezno
+                                        }
+                                    });
+
                             Toast.makeText(getContext(),
                                     "Request successfully sent",
                                     Toast.LENGTH_SHORT).show();
@@ -142,5 +169,49 @@ public class RequestBookDialogFragment extends DialogFragment {
                                 Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    private void prefillFromProfile() {
+        String userId = authManager.getUserId();
+        if (userId == null) return;
+
+        userRepository.getUserProfileShipping(
+                userId
+        ).enqueue(new Callback<List<ProfileShippingModel>>() {
+            @Override
+            public void onResponse(Call<List<ProfileShippingModel>> call, Response<List<ProfileShippingModel>> response) {
+
+                if (!isAdded()) return;
+
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && !response.body().isEmpty()) {
+
+                    ProfileShippingModel p = response.body().get(0);
+                    if (TextUtils.isEmpty(etFirstName.getText()) && p.getFirstName() != null)
+                        etFirstName.setText(p.getFirstName());
+
+                    if (TextUtils.isEmpty(etLastName.getText()) && p.getLastName() != null)
+                        etLastName.setText(p.getLastName());
+
+                    if (TextUtils.isEmpty(etAddress.getText()) && p.getAddress() != null)
+                        etAddress.setText(p.getAddress());
+
+                    if (TextUtils.isEmpty(etPostalCode.getText()) && p.getPostalCode() != null)
+                        etPostalCode.setText(p.getPostalCode());
+
+                    if (TextUtils.isEmpty(etCity.getText()) && p.getCity() != null)
+                        etCity.setText(p.getCity());
+
+                    if (TextUtils.isEmpty(etShippingNote.getText()) && p.getShippingNote() != null)
+                        etShippingNote.setText(p.getShippingNote());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProfileShippingModel>> call, Throwable t) {
+                // nije kritično - možeš samo logirati
+            }
+        });
     }
 }
