@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -52,8 +53,8 @@ public class EditBookActivity extends BaseActivity {
     private AuthManager authManager;
     private String bookId;
 
-    private String currentImageUrl;     // url koji je bio prije
-    private Uri newImageUri = null;     // ako user odabere novu sliku
+    private String currentImageUrl;
+    private Uri newImageUri = null;
 
     private final OkHttpClient http = new OkHttpClient();
 
@@ -87,6 +88,13 @@ public class EditBookActivity extends BaseActivity {
         etDescription.setText(getIntent().getStringExtra(EXTRA_DESCRIPTION));
 
         currentImageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(EditBookActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         // Preview trenutne slike
         if (currentImageUrl != null && !currentImageUrl.isEmpty()) {

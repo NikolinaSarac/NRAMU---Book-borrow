@@ -16,7 +16,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ba.sum.fsre.bookborrow.R;
 import ba.sum.fsre.bookborrow.api.ApiCallback;
@@ -43,6 +45,7 @@ public class ProfileActivity extends BaseActivity {
 
     private TextView tvUsername, tvEmail;
     private Button btnLogout;
+    private Button btnDeleteAcc;
     private AuthManager authManager;
 
     private BooksFragment booksFragment;
@@ -67,8 +70,10 @@ public class ProfileActivity extends BaseActivity {
         tvUsername = findViewById(R.id.tvUsername);
         tvEmail = findViewById(R.id.tvEmail);
         btnLogout = findViewById(R.id.btnLogout);
+        btnDeleteAcc = findViewById(R.id.btnDeleteAccount);
 
         btnLogout.setOnClickListener(v -> logout());
+        btnDeleteAcc.setOnClickListener(view -> confirmDeleteProfile());
 
         booksFragment = BooksFragment.newInstance(true, false);
         activeBorrowsFragment = new ActiveBorrowsFragment();
@@ -368,4 +373,53 @@ public class ProfileActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+
+    private void confirmDeleteProfile() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete account?")
+                .setMessage("This will delete your profile data and log you out. You can’t undo this.")
+                .setPositiveButton("Delete", (d, which) -> softDeleteProfile())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void softDeleteProfile() {
+        String token = authManager.getToken();
+        String userId = authManager.getUserId();
+        if (token == null || token.isEmpty() || userId == null || userId.isEmpty()) return;
+
+        String authHeader = token.startsWith("Bearer ") ? token : "Bearer " + token;
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("is_deleted", true);
+
+        RetrofitClientService.getInstance()
+                .getApi()
+                .softDeleteProfile(
+                        authHeader,
+                        "eq." + userId,
+                        body
+                )
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(ProfileActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
+                            logout();
+                        } else {
+                            Toast.makeText(ProfileActivity.this,
+                                    "Delete failed: " + response.code(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(ProfileActivity.this,
+                                t.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
 }

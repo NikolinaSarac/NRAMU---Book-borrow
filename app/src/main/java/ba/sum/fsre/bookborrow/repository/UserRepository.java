@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ba.sum.fsre.bookborrow.models.Profile;
+import ba.sum.fsre.bookborrow.models.ProfileShippingModel;
 import ba.sum.fsre.bookborrow.models.RequestBook;
 import ba.sum.fsre.bookborrow.models.requests.RequestForBookModel;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
@@ -26,6 +27,24 @@ public class UserRepository {
     public  Call<List<Profile>> getUserProfile(String userId) {
         return api.getProfile(bearer(),"eq." + userId);
     }
+
+    public  Call<List<ProfileShippingModel>> getUserProfileShipping(String userId) {
+        return api.getProfileShippingModel(bearer(),"eq." + userId);
+    }
+
+    public  Call<Void> updateUserProfileShipping(String userId,String first_name,String last_name,String address,String postal_code,String city,String shipping_note) {
+        return api.updateShippingInfo(bearer(),
+                "eq." + userId,
+                    new ProfileShippingModel(
+                            first_name,
+                            last_name,
+                            address,
+                            postal_code,
+                            city,
+                            shipping_note)
+                );
+    }
+
     public String getCurrentUserId() {
         return auth.getUserId();
     }

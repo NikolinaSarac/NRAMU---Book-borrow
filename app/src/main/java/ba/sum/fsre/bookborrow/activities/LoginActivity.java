@@ -3,6 +3,7 @@ package ba.sum.fsre.bookborrow.activities;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.view.View;
 import android.widget.EditText;
@@ -11,10 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ba.sum.fsre.bookborrow.R;
+import ba.sum.fsre.bookborrow.models.IsDeletedRequest;
 import ba.sum.fsre.bookborrow.utils.AuthManager;
 import ba.sum.fsre.bookborrow.utils.RetrofitClient;
+import ba.sum.fsre.bookborrow.utils.RetrofitClientService;
 import ba.sum.fsre.bookborrow.utils.SupabaseAuthService;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,17 +94,61 @@ public class LoginActivity extends AppCompatActivity {
         authService.login(body).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
-                    JsonObject res = response.body();
+                if (!response.isSuccessful() || response.body() == null) {
+                    Toast.makeText(LoginActivity.this,
+                            "Invalid credentials", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                    String token = res.get("access_token").getAsString();
-                    String userId = res.getAsJsonObject("user").get("id").getAsString();
+                JsonObject res = response.body();
+                String token = res.get("access_token").getAsString();
+                String userId = res.getAsJsonObject("user").get("id").getAsString();
 
-                    authManager.saveToken(token);
-                    authManager.saveUserId(userId);
-                    authManager.saveEmail(email);
+                String authHeader = "Bearer " + token;
 
-                    runOnUiThread(() -> {
+                RetrofitClientService.getInstance()
+                        .getApi().
+                        checkProfileDeleted(
+                        authHeader,
+                        "eq." + userId,
+                        "is_deleted"
+                ).enqueue(new Callback<List<IsDeletedRequest>>() {
+                    @Override
+                    public void onResponse(Call<List<IsDeletedRequest>> call,
+                                           Response<List<IsDeletedRequest>> profileResp) {
+
+                        Log.e("LOGIN", "profileResp code=" + profileResp.code());
+
+                        try {
+                            if (profileResp.errorBody() != null) {
+                                Log.e("LOGIN", "profileResp error=" + profileResp.errorBody().string());
+                            }
+                        } catch (Exception ignored) {}
+
+                        Log.e("LOGIN", "profileResp body=" + profileResp.body());
+
+                        if (!profileResp.isSuccessful()
+                                || profileResp.body() == null
+                                || profileResp.body().isEmpty()) {
+
+                            Toast.makeText(LoginActivity.this,
+                                    "Profile not found", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        boolean isDeleted = profileResp.body().get(0).isDeleted();
+
+                        if (isDeleted) {
+                            Toast.makeText(LoginActivity.this,
+                                    "This account has been deleted",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        authManager.saveToken(token);
+                        authManager.saveUserId(userId);
+                        authManager.saveEmail(email);
+
                         Toast.makeText(LoginActivity.this,
                                 "Login successful", Toast.LENGTH_SHORT).show();
 
@@ -104,21 +156,21 @@ public class LoginActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-                    });
-                } else {
-                    runOnUiThread(() ->
-                            Toast.makeText(LoginActivity.this,
-                                    "Invalid credentials", Toast.LENGTH_SHORT).show());
-                }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<IsDeletedRequest>> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this,
+                                "Profile check failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                runOnUiThread(() ->
-                        Toast.makeText(LoginActivity.this,
-                                "Network error", Toast.LENGTH_SHORT).show());
+                Toast.makeText(LoginActivity.this,
+                        "Network error", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

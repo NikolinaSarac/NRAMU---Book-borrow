@@ -12,5 +12,9 @@ public class Profile {
     public String getEmail() { return email; }
     public String getUsername() { return username; }
     public String getCreatedAt() { return created_at; }
+
+    public String getCreated_at() {
+        return created_at;
+    }
 }
 
