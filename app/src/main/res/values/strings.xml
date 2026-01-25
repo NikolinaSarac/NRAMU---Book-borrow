@@ -30,7 +30,7 @@ We use collected information to:\n
 - Ensure application security\n
 \n
 4. Data Storage and Security\n
-User data is securely stored using third-party backend services (e.g. cloud databases). We take reasonable measures to protect personal data from unauthorized access.\n
+The App uses Supabase as a backend service. Personal information including account data, profile, and borrowing is securely stored in Supabase-hosted databases and authentication systems. All data transmission between the App and Supabase is encrypted using HTTPS.
 \n
 5. Data Sharing\n
 We do not sell or rent user data to third parties. User data is only shared when required to operate the Application or comply with legal obligations.\n
@@ -42,13 +42,21 @@ Users have the right to:\n
 - Request correction or deletion of their data\n
 - Delete their account at any time\n
 \n
-7. Cookies and Tracking\n
+        7.Account Deletion\n
+\n
+The App provides a built-in option to permanently delete your account. Users can delete their account directly within the App by navigating to the dashboard and selecting "Delete account". When confirmed, all personal data including profile information and appointments will be permanently removed from our systems. This action is irreversible.
+
+        8. Children’s Privacy\n
+\n
+The App is not intended for use by children under the age of 13. We do not knowingly collect personal information from children.
+
+9. Cookies and Tracking\n
 Book Borrow does not use cookies for advertising purposes. Basic analytics may be used to improve application performance.\n
 \n
-8. Changes to Privacy Policy\n
+10. Changes to Privacy Policy\n
 We may update this Privacy Policy from time to time. Any changes will be posted within the Application.\n
 \n
-9. Contact\n
+11. Contact\n
 For privacy-related questions, contact us at:\n
 nikolina.sarac@fsre.sum.ba
     </string>
